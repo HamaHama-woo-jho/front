@@ -1,11 +1,5 @@
 import React from 'react';
 
-const ChatBoxSetting = () => {
-    return (
-        <div>
-
-        </div>
-    );
-};
+const ChatBoxSetting = () => <></>;
 
 export default ChatBoxSetting;

@@ -5,61 +5,74 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logoutAction } from '../reducers/user';
 
 const AppLayout = ({ children }) => {
-    const { isLoggedIn } = useSelector((state) => state.user);
-    const dispatch = useDispatch();
-    const onLogOut = useCallback(() => {
-        dispatch(logoutAction());
-    }, []);
+  const { isLoggedIn } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const onLogOut = useCallback(() => {
+    dispatch(logoutAction());
+  }, []);
 
-    return (
-        <div style={{ height: "100vh" }}>
-            <div
-                className="mx-auto py-3"
-                style={{
-                    backgroundColor: "white",
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    zIndex: 5000,
-                }}
+  return (
+    <div style={{ height: '100vh' }}>
+      <div
+        className="mx-auto py-3"
+        style={{
+          backgroundColor: 'white',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 5000,
+        }}
+      >
+        <div className="m-2 inline-block align-middle flex justify-between">
+          <div>
+            <span
+              id="title"
+              className="ml-10 mr-2 text-2xl align-middle pt-1"
+              style={{
+                color: '#0080ff',
+              }}
             >
-                <div className="m-2 inline-block align-middle justify-between">
-                    <span
-                        id="title"
-                        className="ml-10 mr-2 text-2xl align-middle pt-2"
-                        style={{
-                            color: "#0080ff",
-                        }}
-                    >
-                        하마하마
-                    </span>
-                    <Form.Group className="m-2 inline-block align-middle">
-                        <Form.Control className="h-8 text-md" placeholder="검색어를 입력하세요" />
-                    </Form.Group>
-                    {isLoggedIn
-                        ? <Button
-                            variant='secondary'
-                            classsName='text-sm'
-                            onClick={onLogOut}
-                        >
-                            로그아웃
-                            </Button>
-                        : <></>}
-                </div>
+              하마하마
+            </span>
+            <Form.Group className="m-2 inline-block align-middle">
+              <Form.Control
+                className="h-8 text-md rounded-full"
+                placeholder="검색어를 입력하세요"
+              />
+            </Form.Group>
+          </div>
+          {isLoggedIn ? (
+            <div className="m-2 inline-block align-middle justify-self-end">
+              <Button
+                className="text-sm h-8 mr-4 rounded-full"
+                variant="secondary"
+                onClick={onLogOut}
+              >
+                로그아웃
+              </Button>
             </div>
-            <div className="align-items-center flex flex-col pt-24 h-full">
-                {children}
-            </div>
-            <div className="flex flex-col">
-                <span className="text-gray-500 text-center">@재구 혜인</span>
-            </div>
-        </div >
-    )
+          ) : (
+            <></>
+          )}
+        </div>
+      </div>
+      <div className="flex flex-col pt-24">{children}</div>
+      <footer className="flex flex-col h-72">
+        <div className="h-full" />
+        <span
+          className="text-center text-white py-1"
+          style={{ backgroundColor: '#5f5f5f' }}
+        >
+          @jaegoo hyein
+        </span>
+      </footer>
+    </div>
+  );
 };
 
 AppLayout.propTypes = {
-    children: PropTypes.node.isRequired,
-}
+  children: PropTypes.node.isRequired,
+};
 
 export default AppLayout;
