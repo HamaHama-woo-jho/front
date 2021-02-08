@@ -23,13 +23,29 @@ const LoginForm = () => {
 
   return (
     <div className="shadow-md mt-24 mb-24 mx-auto w-96 bg-white rounded-2xl">
-      <div className="border-none text-center px-4 pt-2 pb-5">
-        <div
-          id="login_title"
-          className="mb-10 mt-3"
-          style={{ color: '#0080ff', fontSize: '30px' }}
-        >
-          하마하마
+      <div className="border-none text-center px-4 pt-2 pb-5 mt-3">
+        <div className="mb-4 mt-2">
+          <span
+            id="login_title"
+            className="mb-12 mt-3"
+            style={{ color: '#00b9f1', fontSize: '30px' }}
+          >
+            로
+          </span>
+          <span
+            id="login_title"
+            className="mb-12 mt-3"
+            style={{ color: '#f9c00c', fontSize: '30px' }}
+          >
+            그
+          </span>
+          <span
+            id="login_title"
+            className="mb-12 mt-3"
+            style={{ color: '#ff7473', fontSize: '30px' }}
+          >
+            인
+          </span>
         </div>
         <div>
           <Form onSubmit={onLogIn}>

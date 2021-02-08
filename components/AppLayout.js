@@ -14,26 +14,53 @@ const AppLayout = ({ children }) => {
   return (
     <div style={{ height: '100vh' }}>
       <div
-        className="mx-auto py-3"
+        className="mx-auto py-3  shadow-md "
         style={{
           backgroundColor: 'white',
           position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
-          zIndex: 5000,
+          zIndex: 100,
         }}
       >
         <div className="m-2 inline-block align-middle flex justify-between">
           <div>
             <span
               id="title"
-              className="ml-10 mr-2 text-2xl align-middle pt-1"
+              className="ml-10 text-2xl align-middle pt-1"
               style={{
-                color: '#0080ff',
+                color: '#f9c00c',
               }}
             >
-              하마하마
+              하
+            </span>
+            <span
+              id="title"
+              className="text-2xl align-middle pt-1"
+              style={{
+                color: '#00b9f1',
+              }}
+            >
+              마
+            </span>
+            <span
+              id="title"
+              className="text-2xl align-middle pt-1"
+              style={{
+                color: '#ff7473',
+              }}
+            >
+              하
+            </span>
+            <span
+              id="title"
+              className="mr-2 text-2xl align-middle pt-1"
+              style={{
+                color: '#a593e0',
+              }}
+            >
+              마
             </span>
             <Form.Group className="m-2 inline-block align-middle">
               <Form.Control

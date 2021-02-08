@@ -48,7 +48,7 @@ class MyDocument extends Document {
             href="path/to/font-awesome/css/font-awesome.min.css"
           />
         </Head>
-        <body style={{ height: '100vh', backgroundColor: '#f4f5f9' }}>
+        <body style={{ height: '100vh', backgroundColor: '#fffded' }}>
           <Main />
           <NextScript />
         </body>
