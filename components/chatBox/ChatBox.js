@@ -76,14 +76,16 @@ const NewChatBox = () => {
           </span>
         </div>
         <div className="w-1/3 inline-block align-middle">
-          {isIn ? (
-            <PlayCircleTwoTone twoToneColor="#0080ff" onClick={onClickEnter} />
-          ) : (
-            <PlayCircleOutlined
-              className="text-gray-400"
-              onClick={onClickEnter}
-            />
-          )}
+          {isIn
+            ? (
+              <PlayCircleTwoTone twoToneColor="#0080ff" onClick={onClickEnter} />
+            )
+            : (
+              <PlayCircleOutlined
+                className="text-gray-400"
+                onClick={onClickEnter}
+              />
+            )}
         </div>
       </Card.Footer>
     </Card>
