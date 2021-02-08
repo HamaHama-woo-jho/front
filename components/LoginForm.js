@@ -54,7 +54,7 @@ const LoginForm = () => {
             </Form.Group>
             <Form.Group>
               <Button
-                type="sumit"
+                type="submit"
                 variant="primary w-full rounded-full text-sm"
               >
                 로그인
