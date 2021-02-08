@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+import Link from 'next/link';
 import { Form, Button } from 'react-bootstrap';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
@@ -71,13 +72,22 @@ const LoginForm = () => {
             <Form.Group>
               <Button
                 type="submit"
-                variant="primary w-full rounded-full text-sm"
+                variant="primary w-full rounded-full text-sm mb-2 py-2"
               >
                 로그인
               </Button>
-              <p className="text-sm text-right mt-1 text-gray-400">회원 가입</p>
+              <Link href="/signup">
+                <a>
+                  <Button
+                    variant="secondary w-full rounded-full text-sm py-2"
+                  >
+                    회원 가입
+                  </Button>
+                </a>
+              </Link>
             </Form.Group>
           </Form>
+
         </div>
       </div>
     </div>
