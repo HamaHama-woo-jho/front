@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
@@ -26,42 +27,46 @@ const AppLayout = ({ children }) => {
       >
         <div className="m-2 inline-block align-middle flex justify-between">
           <div>
-            <span
-              id="title"
-              className="ml-10 text-2xl align-middle pt-1"
-              style={{
-                color: '#f9c00c',
-              }}
-            >
-              하
-            </span>
-            <span
-              id="title"
-              className="text-2xl align-middle pt-1"
-              style={{
-                color: '#00b9f1',
-              }}
-            >
-              마
-            </span>
-            <span
-              id="title"
-              className="text-2xl align-middle pt-1"
-              style={{
-                color: '#ff7473',
-              }}
-            >
-              하
-            </span>
-            <span
-              id="title"
-              className="mr-2 text-2xl align-middle pt-1"
-              style={{
-                color: '#a593e0',
-              }}
-            >
-              마
-            </span>
+            <Link href="/">
+              <a>
+                <span
+                  id="title"
+                  className="ml-10 text-2xl align-middle pt-1"
+                  style={{
+                    color: '#f9c00c',
+                  }}
+                >
+                  하
+                </span>
+                <span
+                  id="title"
+                  className="text-2xl align-middle pt-1"
+                  style={{
+                    color: '#00b9f1',
+                  }}
+                >
+                  마
+                </span>
+                <span
+                  id="title"
+                  className="text-2xl align-middle pt-1"
+                  style={{
+                    color: '#ff7473',
+                  }}
+                >
+                  하
+                </span>
+                <span
+                  id="title"
+                  className="mr-2 text-2xl align-middle pt-1"
+                  style={{
+                    color: '#a593e0',
+                  }}
+                >
+                  마
+                </span>
+              </a>
+            </Link>
             <Form.Group className="m-2 inline-block align-middle">
               <Form.Control
                 className="h-8 text-md rounded-full"
