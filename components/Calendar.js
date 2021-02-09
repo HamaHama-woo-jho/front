@@ -1,62 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import Helmet from 'react-helmet';
 import 'react-day-picker/lib/style.css';
-import { Button } from 'react-bootstrap';
+import { RedoOutlined } from '@ant-design/icons';
 
-const Calender = () => {
-  const [from, setFrom] = useState(undefined);
-  const [to, setTo] = useState(undefined);
+const Calender = ({ data, setData }) => {
+  const [from, setFrom] = useState(data.from);
+  const [to, setTo] = useState(data.to);
 
-  const handleResetClick = () => {
-    setFrom(undefined);
-    setTo(undefined);
-  };
+  const handleResetClick = useCallback(
+    (e) => {
+      e.preventDefault();
+      setFrom(undefined);
+      setTo(undefined);
+      setData({ ...data, from: undefined, to: undefined });
+    },
+    [from, to]
+  );
 
-  const handleDayClick = (day) => {
-    const range = DateUtils.addDayToRange(day, { from, to });
-    setFrom(range.from);
-    setTo(range.to);
-  };
+  const handleDayClick = useCallback(
+    (day) => {
+      const range = DateUtils.addDayToRange(day, { from, to });
+      setFrom(range.from);
+      setTo(range.to);
+      setData({ ...data, from: range.from, to: range.to });
+    },
+    [from, to]
+  );
 
   return (
     <div className="text-center">
-      <p className="mx-4 mb-2">
+      <div className="mx-4 mb-2">
         {!from && !to && '날짜를 선택하세요'}
         {from && !to && '마지막 날짜를 선택하세요'}
         {from && to && '날짜를 확인하세요'}
-      </p>
+        {from && to && (
+          <RedoOutlined
+            className="inline-block align-middle px-2 pb-1"
+            onClick={handleResetClick}
+          />
+        )}
+      </div>
       <DayPicker
-        className="Selectable bg-white shadow-md rounded-xl m-auto"
+        className="Selectable bg-white"
         numberOfMonths={1}
         selectedDays={[from, { from, to }]}
         modifiers={{ start: from, end: to }}
         onDayClick={handleDayClick}
         disabledDays={{ before: new Date() }}
       />
-      <div className="mx-8 my-5 bg-white shadow-md rounded-xl">
-        <div className="flex flex-col">
-          {from
-            && from.toLocaleDateString()
-            && (
-              <span>
-                {from.toLocaleDateString()}
-              </span>
-            )}
-          {to
-            && to.toLocaleDateString()
-            && (
-              <span>
-                {to.toLocaleDateString()}
-              </span>
-            )}
-          {from && to && (
-            <Button
-              className="link h-8 text-sm"
-              onClick={handleResetClick}
-            >
-              초기화
-            </Button>
+      <div className="mx-10 my-2">
+        <div className="flex justify-between">
+          {from && from.toLocaleDateString() && (
+            <div className="rounded-full shadow-md py-2 px-3">
+              {from.toLocaleDateString()}
+            </div>
+          )}
+          {to && to.toLocaleDateString() && <div className="pt-2">~</div>}
+          {to && to.toLocaleDateString() && (
+            <div className="rounded-full shadow-md py-2 px-3">
+              {to.toLocaleDateString()}
+            </div>
           )}
         </div>
       </div>
@@ -83,6 +88,11 @@ const Calender = () => {
       </Helmet>
     </div>
   );
+};
+
+Calender.propTypes = {
+  data: PropTypes.object.isRequired,
+  setData: PropTypes.func.isRequired,
 };
 
 export default Calender;

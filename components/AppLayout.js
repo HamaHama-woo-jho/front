@@ -69,21 +69,19 @@ const AppLayout = ({ children }) => {
               />
             </Form.Group>
           </div>
-          {isLoggedIn
-            ? (
-              <div className="m-2 inline-block align-middle justify-self-end">
-                <Button
-                  className="text-sm h-8 mr-4 rounded-full"
-                  variant="secondary"
-                  onClick={onLogOut}
-                >
-                  로그아웃
-                </Button>
-              </div>
-            )
-            : (
-              <></>
-            )}
+          {isLoggedIn ? (
+            <div className="m-2 inline-block align-middle justify-self-end">
+              <Button
+                className="text-sm h-8 mr-4 rounded-full"
+                variant="secondary"
+                onClick={onLogOut}
+              >
+                로그아웃
+              </Button>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <div className="flex flex-col pt-24">{children}</div>
@@ -91,7 +89,10 @@ const AppLayout = ({ children }) => {
         <div className="h-full" />
         <span
           className="text-center text-white py-1"
-          style={{ backgroundColor: '#5f5f5f' }}
+          style={{
+            backgroundColor: '#5f5f5f',
+            bottom: 0,
+          }}
         >
           @jaegoo hyein
         </span>
