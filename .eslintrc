@@ -44,5 +44,6 @@
         ],
       },
     ],
+    "consistent-return": "off",
   }
 }
