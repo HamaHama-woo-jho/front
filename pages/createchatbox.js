@@ -51,7 +51,7 @@ const createchatbox = () => {
       setPage(page - 1);
       console.log(data);
     },
-    [tag, location]
+    [page, title, link, cost, personnel, tag, location]
   );
 
   const renderPage = (key) => {
