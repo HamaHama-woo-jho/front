@@ -1,58 +1,69 @@
 import React, { useState, useCallback } from 'react';
+import Link from 'next/link';
+import { useDispatch } from 'react-redux';
 import { Form, Button } from 'react-bootstrap';
 import AppLayout from '../components/AppLayout';
 import Calender from '../components/Calendar';
 import useInput from '../hooks/useInput';
 
+import { addChatAction } from '../reducers/post';
+
 const initialData = {
+  id: 1,
+  User: {
+    id: 'jaegoo1199',
+    nickname: '재구몬',
+  },
   title: '',
-  link: '',
-  cost: 0,
   personnel: 0,
-  costPerPerson: 0,
-  location: '',
-  tag: '',
+  curPersonnel: 1,
   from: undefined,
   to: undefined,
+  price: 0,
+  location: '',
+  link: '',
+  textArea: '',
+  tag: '',
 };
 
 const createchatbox = () => {
+  const dispatch = useDispatch();
+
   const [data, setData] = useState(initialData);
   const [page, setPage] = useState(0);
   const [title, onChangeTitle] = useInput(data.title);
   const [link, onChangeLink] = useInput(data.link);
-  const [cost, onChangeCost] = useInput(data.cost);
+  const [price, onChangePrice] = useInput(data.price);
   const [personnel, onChangePersonnel] = useInput(data.personnel);
-  const [tag, onChangeTag] = useInput(data.tag);
+  const [textArea, onChangeTextArea] = useInput(data.textArea);
   const [location, onChangeLocaton] = useInput(data.location);
 
   const plusPageCount = useCallback(
     (e) => {
       e.preventDefault();
       if (page === 0) {
-        setData({ ...data, title, link, cost, personnel });
-        setPage(page + 1);
-      } else if (page === 1) {
-        setPage(page + 1);
-      } else {
-        setData({ ...data, tag, location });
+        setData({ ...data, title, link, price, personnel });
       }
-      console.log(data);
+      setPage(page + 1);
     },
-    [page, title, link, cost, personnel, tag, location]
+    [page, title, link, price, personnel]
   );
 
   const minusPageCount = useCallback(
     (e) => {
       e.preventDefault();
       if (page === 2) {
-        setData({ ...data, tag, location });
+        setData({ ...data, textArea, location });
       }
       setPage(page - 1);
       console.log(data);
     },
-    [page, title, link, cost, personnel, tag, location]
+    [page, title, link, price, personnel, textArea, location]
   );
+
+  const onCreate = useCallback(() => {
+    dispatch(addChatAction({ ...data, textArea, location }));
+  }, [textArea, location]);
 
   const renderPage = (key) => {
     switch (key) {
@@ -86,8 +97,8 @@ const createchatbox = () => {
                   type="text"
                   placeholder="제품 가격을 적어주세요"
                   className="rounded-full"
-                  onChange={onChangeCost}
-                  defaultValue={data.cost}
+                  onChange={onChangePrice}
+                  defaultValue={data.price}
                 />
               </Form.Group>
               <Form.Group controlId="personnel" className="ml-1">
@@ -118,7 +129,17 @@ const createchatbox = () => {
           <>
             <Form.Group className="my-4">
               <Form.Label>위치</Form.Label>
-              <Form.Control as="select" />
+              <Form.Control
+                as="select"
+                onChange={onChangeLocaton}
+                defaultValue={data.location}
+              >
+                <option>북측</option>
+                <option>서측</option>
+                <option>동측</option>
+                <option>어은동</option>
+                <option>궁동</option>
+              </Form.Control>
             </Form.Group>
             <Form.Group className="my-4">
               <Form.Label>정보</Form.Label>
@@ -126,8 +147,8 @@ const createchatbox = () => {
                 as="textarea"
                 rows={3}
                 placeholder="#짱맛있는귤 #ㅎㅎ #너도와ㅎㅎ엄청맛있어요!!"
-                onChange={onChangeTag}
-                defaultValue={data.tag}
+                onChange={onChangeTextArea}
+                defaultValue={data.textArea}
               />
             </Form.Group>
           </>
@@ -139,7 +160,7 @@ const createchatbox = () => {
 
   return (
     <AppLayout className="h-full">
-      <div className="bg-white w-96 rounded-xl shadow-md mx-auto mt-8 px-4">
+      <div className="bg-white w-96 rounded-xl shadow-md mx-auto mt-8 py-2 px-4">
         <Form>
           <div className="w-full text-center text-2xl mt-8 mb-4">
             <span
@@ -193,9 +214,22 @@ const createchatbox = () => {
               이전
             </Button>
           )}
-          <Button onClick={plusPageCount} className="rounded-full w-full mx-1">
-            {page === 2 ? '제출' : '다음'}
-          </Button>
+          {page === 2 ? (
+            <Link href="/">
+              <a className="rounded-full w-full mx-1">
+                <Button className="rounded-full w-full" onClick={onCreate}>
+                  제출
+                </Button>
+              </a>
+            </Link>
+          ) : (
+            <Button
+              onClick={plusPageCount}
+              className="rounded-full w-full mx-1"
+            >
+              다음
+            </Button>
+          )}
         </div>
       </div>
     </AppLayout>
