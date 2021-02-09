@@ -1,3 +1,6 @@
+import faker from 'faker';
+import shortId from 'shortid';
+
 export const initialState = {
   mainPosts: [
     {
@@ -27,24 +30,24 @@ export const initialState = {
   ],
 };
 
-const dummyPost = {
-  mainPosts: [
-    {
-      id: 2,
+const generateDummyPost = (number) =>
+  Array(number)
+    .fill()
+    .map(() => ({
+      id: shortId.generate(),
       User: {
-        id: 456,
-        nickname: 'IamHama',
+        id: shortId.generate(),
+        nickname: faker.name.findName(),
       },
-      title: '컴싸 공구',
+      title: faker.name.jobTitle(),
       personnel: 7,
       curPersonnel: 1,
-      from: '2021-02-05',
-      now: '2021-02-08',
-      to: '2021-03-01',
+      from: faker.date.past(),
+      to: faker.date.future(),
       location: '어은동',
-      price: 30000,
+      price: Number(faker.commerce.price()) * 100,
       link: 'http://item.gmarket.co.kr/Item?goodscode=995511248',
-      textArea: '컴싸 공구하실 고등학생 분들 연락바랍니다 열공합시다 ^^ 화이팅',
+      textArea: faker.lorem.sentence(),
       tag: [
         {
           content: '수능대박',
@@ -56,9 +59,7 @@ const dummyPost = {
           content: '모나미',
         },
       ],
-    },
-  ],
-};
+    }));
 
 export const ADD_CHAT = 'ADD_CHAT';
 
@@ -67,7 +68,10 @@ export const addChatAction = (data) => ({
   data,
 });
 
-const reducer = (state = initialState, action) => {
+const reducer = (
+  state = { ...initialState, mainPosts: generateDummyPost(10) },
+  action
+) => {
   switch (action.type) {
     case ADD_CHAT:
       return {
