@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Card } from 'react-bootstrap';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import {
@@ -8,31 +9,41 @@ import {
 } from '@ant-design/icons';
 import { Price, Title, TextWrapper, HashTag } from './style';
 
-const dummy = {
-  title: '귤 공구해요',
-  cost: '16,000',
-  info: ['무농약 귤', '제주도 직송', '꿀맛'],
-  current: 8,
-  max: 10,
-  startDate: '2020.02.01',
-  endDate: '2020.02.07',
-};
-
-const NewChatBox = () => {
+const ChatBox = ({ post }) => {
   const [isIn, setIsIn] = useState('false');
-
-  const onClickEnter = useCallback(() => {
+  const onClickJoin = useCallback(() => {
     setIsIn(!isIn);
   }, [isIn]);
 
+  const calcDateDiff = (a, b) => {
+    const oneDay = 1000 * 60 * 60 * 24;
+    return Math.round((Date.parse(b) - Date.parse(a)) / oneDay);
+  };
+
+  const calcDate = (from, to, now) => {
+    const isStart = Date.parse(from) < Date.parse(now);
+    return isStart
+      ? `D-${calcDateDiff(now, to)}`
+      : `${calcDateDiff(now, from)}일 후`;
+  };
+
+  const calcProgressBar = (from, to, now) => {
+    const isStart = Date.parse(from) < Date.parse(now);
+    const dateDiff = isStart ? calcDateDiff(now, to) : 0;
+    return dateDiff > 7 || dateDiff === 0 ? 0 : ((7 - dateDiff) * 100) / 7;
+  };
+
+  const num2currency = (num) => num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').split('.')[0];
+
   return (
-    <Card className="border-none text-center shadow-md mx-auto my-3 w-72 sm:w-70 md:w-50">
+    <Card className="border-none text-center shadow-md mx-auto my-3 w-72">
       <Card.Body className="pb-1">
-        <Title>{dummy.title}</Title>
+        <img src="https://thumbnail8.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/511854261736331-ad4bc2d1-c0de-47c0-bef2-0492c8873ea0.jpg" alt="" />
+        <Title>{post.title}</Title>
         <div className="w-1/3 pb-1 m-auto">
           <CircularProgressbar
-            value={66}
-            text="D-3"
+            value={calcProgressBar(post.from, post.to, new Date())}
+            text={calcDate(post.from, post.to, new Date())}
             styles={buildStyles({
               textSize: '20px',
               pathTransitionDuration: 0.5,
@@ -44,26 +55,23 @@ const NewChatBox = () => {
           />
         </div>
         <div>
-          <Price>{dummy.cost}</Price>
+          <Price>{num2currency(Math.round(post.price / post.personnel))}</Price>
           <TextWrapper> /인</TextWrapper>
         </div>
       </Card.Body>
       <Card.Footer className="bg-white">
-        <div className="flex flex-col text-sm my-1">
-          {dummy.info.map((item) => (
+        <div className="flex flex-col text-sm my-1 text-gray-500">
+          {/* {post.tag.map((item) => (
             <div className="mb-1" key="info">
-              <HashTag className="px-1 text-gray-500">{`#${item}`}</HashTag>
+              <HashTag className="px-1 text-gray-500">{`#${item.content}`}</HashTag>
             </div>
-          ))}
+          ))} */}
+          <HashTag>{post.textArea}</HashTag>
         </div>
       </Card.Footer>
       <Card.Footer className="flex p-0 h-9 bg-white">
         <div className="w-1/3 inline-block align-middle text-gray-400">
-          <a
-            href="https://github.com/"
-            target="__blank"
-            rel="noreferrer noopener"
-          >
+          <a href={post.link} target="__blank" rel="noreferrer noopener">
             <InfoCircleOutlined />
           </a>
         </div>
@@ -72,19 +80,17 @@ const NewChatBox = () => {
           style={{ borderRightWidth: '1px', borderLeftWidth: '1px' }}
         >
           <span className="inline-block align-middle text-gray-400 text-sm">
-            4 / 5
+            {post.curPersonnel} / {post.personnel}
           </span>
         </div>
         <div className="w-1/3 inline-block align-middle">
-          {isIn
-            ? (
-              <PlayCircleTwoTone twoToneColor="#0080ff" onClick={onClickEnter} />
-            )
-            : (
-              <PlayCircleOutlined
-                className="text-gray-400"
-                onClick={onClickEnter}
-              />
+          {isIn ? (
+            <PlayCircleOutlined
+              className="text-gray-400"
+              onClick={onClickJoin}
+            />
+          ) : (
+              <PlayCircleTwoTone twoToneColor="#0080ff" onClick={onClickJoin} />
             )}
         </div>
       </Card.Footer>
@@ -92,4 +98,8 @@ const NewChatBox = () => {
   );
 };
 
-export default NewChatBox;
+ChatBox.propTypes = {
+  post: PropTypes.object.isRequired,
+};
+
+export default ChatBox;
