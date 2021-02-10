@@ -33,15 +33,12 @@ const ChatBox = ({ post }) => {
     return dateDiff > 7 || dateDiff === 0 ? 0 : ((7 - dateDiff) * 100) / 7;
   };
 
-  const num2currency = (num) =>
-    num
-      .toFixed(2)
-      .replace(/\d(?=(\d{3})+\.)/g, '$&,')
-      .split('.')[0];
+  const num2currency = (num) => num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').split('.')[0];
 
   return (
-    <Card className="border-none text-center shadow-md mx-auto my-3 w-72 sm:w-70 md:w-50">
+    <Card className="border-none text-center shadow-md mx-auto my-3 w-72">
       <Card.Body className="pb-1">
+        <img src="https://thumbnail8.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/511854261736331-ad4bc2d1-c0de-47c0-bef2-0492c8873ea0.jpg" alt="" />
         <Title>{post.title}</Title>
         <div className="w-1/3 pb-1 m-auto">
           <CircularProgressbar
@@ -93,8 +90,8 @@ const ChatBox = ({ post }) => {
               onClick={onClickJoin}
             />
           ) : (
-            <PlayCircleTwoTone twoToneColor="#0080ff" onClick={onClickJoin} />
-          )}
+              <PlayCircleTwoTone twoToneColor="#0080ff" onClick={onClickJoin} />
+            )}
         </div>
       </Card.Footer>
     </Card>

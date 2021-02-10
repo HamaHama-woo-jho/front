@@ -75,25 +75,29 @@ const AppLayout = ({ children }) => {
                 />
               </Form.Group>
             </div>
-            {isLoggedIn ? (
-              <div className="m-2 inline-block align-middle justify-self-end">
-                <Button
-                  className="text-sm h-8 mr-4 rounded-full"
-                  variant="secondary"
-                  onClick={onLogOut}
-                >
-                  로그아웃
-                </Button>
-              </div>
-            ) : (
-              <></>
-            )}
+            {isLoggedIn
+              ? (
+                <div className="m-2 inline-block align-middle justify-self-end">
+                  <Button
+                    className="text-sm h-8 mr-4 rounded-full"
+                    variant="secondary"
+                    onClick={onLogOut}
+                  >
+                    로그아웃
+                  </Button>
+                </div>
+              )
+              : (
+                <></>
+              )}
           </div>
         </div>
-        <div className="pt-36 h-full">
-          {children}
+        <div className="pt-36 h-full flex flex-col" style={{ justifyContent: 'space-between' }}>
+          <div>
+            {children}
+          </div>
           <div
-            className="w-full text-center text-white py-1 overflow-hidden"
+            className="w-full text-center text-white py-1"
             style={{
               backgroundColor: '#5f5f5f',
               bottom: 0,

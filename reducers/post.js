@@ -69,7 +69,7 @@ export const addChatAction = (data) => ({
 });
 
 const reducer = (
-  state = { ...initialState, mainPosts: generateDummyPost(10) },
+  state = { ...initialState, mainPosts: generateDummyPost(20) },
   action
 ) => {
   switch (action.type) {
