@@ -1,9 +1,12 @@
 import React, { useRef, useState, useCallback } from 'react';
-import { Form, Row, Col, Button, InputGroup } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { Form, Row, Col, Button } from 'react-bootstrap';
 import styled from 'styled-components';
 import Link from 'next/link';
 import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
+import { signupAction } from '../reducers/user';
+import termtext from '../components/term.txt';
 
 const FormWrapper = styled(Form.Control)`
   border-radius: 9999px;
@@ -39,6 +42,8 @@ const signup = () => {
     setTermError(false);
   }, []);
 
+  const dispatch = useDispatch();
+
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     if (password !== passwordCheck) {
@@ -48,12 +53,43 @@ const signup = () => {
       return setTermError(true);
     }
     console.log(id, nickname, password);
+    dispatch(signupAction({ id, nickname }));
+    // 서버에 연결해서 회원가입 정보를 db에 저장
+    // 에러 없이 성공적으로 저장되었다면 index페이지로 전환
   }, [password, passwordCheck, term]);
 
   const checkId = () => {
     console.log(idRef);
     // 서버와 통신하여 중복 id 있는지 검사
+    // 검사해서 통과되지 않았다면 가입할 수 없도록 하기
+    // 검사하지 않았다면 가입할 수 없도록 하기
   };
+
+  // const readTextFile = (file) => {
+  //   const rawFile = new XMLHttpRequest();
+  //   rawFile.open('GET', file, false);
+  //   // eslint-disable-next-line func-names
+  //   rawFile.onreadystatechange = function () {
+  //     if (rawFile.readyState === 4) {
+  //       if (rawFile.status === 200 || rawFile.status === 0) {
+  //         const allText = rawFile.responseText;
+  //         alert(allText);
+  //       }
+  //     }
+  //   };
+  //   rawFile.send(null);
+  // };
+
+  // const termtext = () => {
+  //   readTextFile('file:///C:/사용자/우혜인/바탕화면/카이스트/몰입캠프/week6/front/components/term.txt');
+  // };
+
+  // const termtext = () => {
+  //   fs.readFile('/term', function (err, data) {
+  //     if (err) throw err;
+  //     console.log(data);
+  //   });
+  // };
 
   return (
     <AppLayout>
@@ -111,11 +147,20 @@ const signup = () => {
                 <FormWrapper className="mb-3" placeholder="비밀번호 재확인" onChange={onChangePasswordCheck} value={passwordCheck} ref={pw2Ref} type="password" required />
                 {passwordError && <ErrorMessage className="mb-2">비밀번호가 일치하지 않습니다.</ErrorMessage>}
               </Form.Group>
-              <div>
-                <input type="checkbox" name="user-term" checked={term} onChange={onChangeTerm} />
-                <label className="ml-1">하마하마 이용약관에 동의합니다.</label>
-                <br />
-                {termError && <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>}
+              <div className="flex flex-col">
+                <div style={{ color: '#503a99' }} className="self-start mb-2 ml-1 font-semibold">✓ 이용 약관</div>
+                <div style={{ backgroundColor: '#f0f0f0' }} className="mb-2 h-24 overflow-y-scroll">
+                  <div className="p-2">
+                    이용 약관은 이러이러이러이러이러합니다!!!!!!
+                    {termtext}
+                  </div>
+                </div>
+                <div>
+                  <input type="checkbox" name="user-term" checked={term} onChange={onChangeTerm} />
+                  <label className="ml-1">하마하마 이용약관에 동의합니다.</label>
+                  <br />
+                  {termError && <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>}
+                </div>
               </div>
               <div className="mt-10">
                 <Link href="/">
