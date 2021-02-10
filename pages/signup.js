@@ -41,8 +41,27 @@ const signup = () => {
     setTermError(false);
   }, []);
 
-  const dispatch = useDispatch();
+  const [showterm, setShowterm] = useState(false);
+  const onOpenTerm = useCallback((e) => {
+    e.preventDefault();
+    setShowterm(true);
+  });
+  const onCloseTerm = useCallback((e) => {
+    e.preventDefault();
+    setShowterm(false);
+  });
 
+  const [showinfo, setShowinfo] = useState(false);
+  const onOpenInfo = useCallback((e) => {
+    e.preventDefault();
+    setShowinfo(true);
+  });
+  const onCloseInfo = useCallback((e) => {
+    e.preventDefault();
+    setShowinfo(false);
+  });
+
+  const dispatch = useDispatch();
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     if (password !== passwordCheck) {
@@ -63,25 +82,6 @@ const signup = () => {
     // 검사해서 통과되지 않았다면 가입할 수 없도록 하기
     // 검사하지 않았다면 가입할 수 없도록 하기
   };
-
-  // const readTextFile = (file) => {
-  //   const rawFile = new XMLHttpRequest();
-  //   rawFile.open('GET', file, false);
-  //   // eslint-disable-next-line func-names
-  //   rawFile.onreadystatechange = function () {
-  //     if (rawFile.readyState === 4) {
-  //       if (rawFile.status === 200 || rawFile.status === 0) {
-  //         const allText = rawFile.responseText;
-  //         alert(allText);
-  //       }
-  //     }
-  //   };
-  //   rawFile.send(null);
-  // };
-
-  // const termtext = () => {
-  //   readTextFile('file:///C:/사용자/우혜인/바탕화면/카이스트/몰입캠프/week6/front/components/term.txt');
-  // };
 
   return (
     <AppLayout>
@@ -139,17 +139,46 @@ const signup = () => {
                 <FormWrapper className="mb-3" placeholder="비밀번호 재확인" onChange={onChangePasswordCheck} value={passwordCheck} ref={pw2Ref} type="password" required />
                 {passwordError && <ErrorMessage className="mb-2">비밀번호가 일치하지 않습니다.</ErrorMessage>}
               </Form.Group>
+
               <div className="flex flex-col">
                 <div style={{ color: '#503a99' }} className="self-start mb-2 ml-1 font-semibold">✓ 이용 약관</div>
-                <div style={{ backgroundColor: '#f0f0f0' }} className="mb-2 h-24 overflow-y-scroll">
-                  <div className="p-2">
-                    이용 약관은 이러이러이러이러이러합니다!!!!!!
-                   
-                  </div>
-                </div>
+                {
+                  showterm ? (
+                    <>
+                      <Button className="border rounded-full border-blue-400 mb-1 text-sm" variant="light" onClick={onCloseTerm}>약관 닫기</Button>
+                      <div style={{ backgroundColor: '#f0f0f0' }} className="mb-2 border rounded-lg">
+                        <div className="p-2 text-sm">
+                          본 하마하마 이용약관(이하 '본 약관'이라 함)은 본 서비스를 이용하는 고객에게 제공하는 서비스의 이용에 관한 조건에 대해 정합니다. {'\n'}
+                          1. 고객은 본 약관에 따라 본 서비스를 이용해야 합니다. 고객은 본 약관에 대해 동의를 했을 경우에 한하여 본 서비스를 이용할 수 
+                          있습니다.
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <Button className="border rounded-full border-blue-400 mb-2 text-sm" variant="light" onClick={onOpenTerm}>약관 보기</Button>
+                  )
+                }
+                <div style={{ color: '#503a99' }} className="self-start mb-2 ml-1 mt-2 font-semibold">✓ 개인정보 수집 및 이용 방침</div>
+                {
+                  showinfo ? (
+                    <>
+                      <Button className="border rounded-full border-blue-400 mb-1 text-sm" variant="light" onClick={onCloseInfo}>개인정보 방침 닫기</Button>
+                      <div style={{ backgroundColor: '#f0f0f0' }} className="mb-3 border rounded-lg">
+                        <div className="p-2 text-sm">
+                          본 하마하마 이용약관(이하 '본 약관'이라 함)은 본 서비스를 이용하는 고객에게 제공하는 서비스의 이용에 관한 조건에 대해 정합니다. {'\n'}
+                          1. 고객은 본 약관에 따라 본 서비스를 이용해야 합니다. 고객은 본 약관에 대해 동의를 했을 경우에 한하여 본 서비스를 이용할 수 
+                          있습니다.
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <Button className="border rounded-full border-blue-400 mb-3 text-sm" variant="light" onClick={onOpenInfo}>개인정보 방침 보기</Button>
+                  )
+                }
+
                 <div>
                   <input type="checkbox" name="user-term" checked={term} onChange={onChangeTerm} />
-                  <label className="ml-1">하마하마 이용약관에 동의합니다.</label>
+                  <label className="ml-1 text-sm">하마하마 이용약관과 개인정보 방침에 동의합니다.</label>
                   <br />
                   {termError && <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>}
                 </div>
