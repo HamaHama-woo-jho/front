@@ -6,7 +6,6 @@ import Link from 'next/link';
 import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
 import { signupAction } from '../reducers/user';
-import termtext from '../components/term.txt';
 
 const FormWrapper = styled(Form.Control)`
   border-radius: 9999px;
@@ -84,13 +83,6 @@ const signup = () => {
   //   readTextFile('file:///C:/사용자/우혜인/바탕화면/카이스트/몰입캠프/week6/front/components/term.txt');
   // };
 
-  // const termtext = () => {
-  //   fs.readFile('/term', function (err, data) {
-  //     if (err) throw err;
-  //     console.log(data);
-  //   });
-  // };
-
   return (
     <AppLayout>
       <div className="shadow-md mt-24 mb-24 mx-auto w-96 bg-white rounded-2xl">
@@ -152,7 +144,7 @@ const signup = () => {
                 <div style={{ backgroundColor: '#f0f0f0' }} className="mb-2 h-24 overflow-y-scroll">
                   <div className="p-2">
                     이용 약관은 이러이러이러이러이러합니다!!!!!!
-                    {termtext}
+                   
                   </div>
                 </div>
                 <div>
