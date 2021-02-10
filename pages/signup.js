@@ -1,6 +1,7 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, Row, Col, Button } from 'react-bootstrap';
+import Router from 'next/router';
 import styled from 'styled-components';
 import Link from 'next/link';
 import AppLayout from '../components/AppLayout';
@@ -74,6 +75,7 @@ const signup = () => {
     dispatch(signupAction({ id, nickname }));
     // 서버에 연결해서 회원가입 정보를 db에 저장
     // 에러 없이 성공적으로 저장되었다면 index페이지로 전환
+    Router.push('/');
   }, [password, passwordCheck, term]);
 
   const checkId = () => {
@@ -165,9 +167,8 @@ const signup = () => {
                       <Button className="border rounded-full border-blue-400 mb-1 text-sm" variant="light" onClick={onCloseInfo}>개인정보 방침 닫기</Button>
                       <div style={{ backgroundColor: '#f0f0f0' }} className="mb-3 border rounded-lg">
                         <div className="p-2 text-sm">
-                          본 하마하마 이용약관(이하 '본 약관'이라 함)은 본 서비스를 이용하는 고객에게 제공하는 서비스의 이용에 관한 조건에 대해 정합니다. {'\n'}
-                          1. 고객은 본 약관에 따라 본 서비스를 이용해야 합니다. 고객은 본 약관에 대해 동의를 했을 경우에 한하여 본 서비스를 이용할 수 
-                          있습니다.
+                          아직은 개인정보를 수집하지 않지만, 나중에 전화번호나 이름 등의 개인정보를 수집할 수 있습니다.
+                          최종 수정일: 2021.02.10.
                         </div>
                       </div>
                     </>
