@@ -7,12 +7,12 @@ import LoginForm from '../components/LoginForm';
 import ChatBoxCopy from '../components/chatBox/ChatBoxCopy';
 
 const Home = () => {
-  const { isLoggedIn } = useSelector((state) => state.user);
+  const { loginDone } = useSelector((state) => state.user);
   const { mainPosts } = useSelector((state) => state.post);
 
   return (
     <AppLayout>
-      {isLoggedIn
+      {loginDone
         ? (
           <>
             <Form.Group className="ml-24 mb-3 inline-block align-middle w-50">

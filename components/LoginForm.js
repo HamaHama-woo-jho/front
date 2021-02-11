@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import { Form, Button } from 'react-bootstrap';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
-import { loginAction } from '../reducers/user';
+import { loginRequestAction } from '../reducers/user';
 
 const FormWrapper = styled(Form.Control)`
   border-radius: 9999px;
@@ -14,12 +14,14 @@ const FormWrapper = styled(Form.Control)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const { loginLoding } = useSelector((state) => state.user);
   const [id, onChangeId] = useInput('');
   const [password, onChangePassword] = useInput('');
 
-  const onLogIn = useCallback(() => {
+  const onLogIn = useCallback((e) => {
+    e.preventDefault();
     console.log(id, password);
-    dispatch(loginAction({ id, password }));
+    dispatch(loginRequestAction({ id, password }));
   }, [id, password]);
 
   return (
@@ -71,6 +73,7 @@ const LoginForm = () => {
             </Form.Group>
             <Form.Group>
               <Button
+                loading={loginLoding}
                 type="submit"
                 variant="primary w-full rounded-full text-sm mb-2 py-2"
               >

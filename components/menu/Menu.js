@@ -5,14 +5,14 @@ import { FiHome, FiUnlock, FiSettings } from 'react-icons/fi';
 import { RiProfileLine } from 'react-icons/ri';
 import { HiOutlinePencil } from 'react-icons/hi';
 import { MainTextWrapper, TextWrapper } from './style';
-import { logoutAction } from '../../reducers/user';
+import { logoutRequestAction } from '../../reducers/user';
 
 const Menu = () => {
   const { isLoggedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const onLogOut = useCallback(() => {
-    dispatch(logoutAction());
+    dispatch(logoutRequestAction());
   }, []);
 
   return (

@@ -1,17 +1,37 @@
 const initialState = {
-  isLoggedIn: false,
+  loginLoading: false,
+  loginDone: false,
+  loginError: null,
+  logoutLoading: false,
+  logoutDone: false,
+  logoutError: null,
+  signupLoading: false,
+  signupDone: false,
+  signupError: null,
   me: null,
   signUpData: {},
   loginData: {},
 };
 
-export const loginAction = (data) => ({
-  type: 'LOG_IN',
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+
+export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
+
+export const SIGNUP_REQUEST = 'SIGNUP_REQUEST';
+export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
+export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
+
+export const loginRequestAction = (data) => ({
+  type: LOGIN_REQUEST,
   data,
 });
 
-export const logoutAction = () => ({
-  type: 'LOG_OUT',
+export const logoutRequestAction = () => ({
+  type: LOGOUT_REQUEST,
 });
 
 export const signupAction = (data) => ({
@@ -21,17 +41,45 @@ export const signupAction = (data) => ({
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'LOG_IN':
+    case LOGIN_REQUEST:
       return {
         ...state,
-        isLoggedIn: true,
+        loginLoading: true,
+        loginDone: false,
+        loginError: null,
+      };
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        loginLoading: false,
+        loginDone: true,
         me: action.data,
       };
-    case 'LOG_OUT':
+    case LOGIN_FAILURE:
       return {
         ...state,
-        isLoggedIn: false,
-        me: null,
+        loginLoading: false,
+        loginError: action.error,
+      };
+    case LOGOUT_REQUEST:
+      return {
+        ...state,
+        logoutLoading: true,
+        logoutDone: false,
+        logoutError: null,
+      };
+    case LOGOUT_SUCCESS:
+      return {
+        ...state,
+        logoutLoading: false,
+        logoutDone: true,
+        me: action.data,
+      };
+    case LOGOUT_FAILURE:
+      return {
+        ...state,
+        logoutLoading: false,
+        logoutError: action.error,
       };
     case 'SIGN_UP':
       return {
