@@ -40,6 +40,7 @@ const generateDummyPost = (number) =>
         nickname: faker.name.findName(),
       },
       title: faker.name.jobTitle(),
+      img: faker.image.image(),
       personnel: 7,
       curPersonnel: 1,
       from: faker.date.past(),

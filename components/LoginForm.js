@@ -23,7 +23,7 @@ const LoginForm = () => {
   }, [id, password]);
 
   return (
-    <div className="shadow-md mt-24 mb-24 mx-auto w-96 bg-white rounded-2xl">
+    <div className="shadow-md mt-10 mb-24 mx-auto w-96 bg-white rounded-2xl">
       <div className="border-none text-center px-4 pt-2 pb-5 mt-3">
         <div className="mb-4 mt-2">
           <span

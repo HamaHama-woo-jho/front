@@ -1,10 +1,10 @@
 import React from 'react';
-import Link from 'next/link';
 import { useSelector } from 'react-redux';
-import { Button } from 'react-bootstrap';
+import { Form, InputGroup } from 'react-bootstrap';
+import { AiOutlineSearch } from 'react-icons/ai';
 import AppLayout from '../components/AppLayout';
 import LoginForm from '../components/LoginForm';
-import ChatBox from '../components/chatBox/ChatBox';
+import ChatBoxCopy from '../components/chatBox/ChatBoxCopy';
 
 const Home = () => {
   const { isLoggedIn } = useSelector((state) => state.user);
@@ -12,34 +12,36 @@ const Home = () => {
 
   return (
     <AppLayout>
-      {isLoggedIn ? (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            {mainPosts.map((post) => (
-              <ChatBox post={post} />
-            ))}
-          </div>
-          <Link href="/createchatbox">
-            <a>
-              <Button
-                style={{
-                  backgroundColor: '#0080ff',
-                  bottom: 0,
-                  right: 0,
-                  position: 'fixed',
-                  margin: '40px',
-                  width: '50px',
-                  height: '50px',
-                  zIndex: 1,
-                }}
-                className="border-none rounded-full shadow-lg"
+      {isLoggedIn
+        ? (
+          <>
+            <Form.Group className="ml-24 mb-3 inline-block align-middle w-50">
+              <Form.Control
+                className="h-12 text-md rounded-full text-sm text-gray-400"
+                placeholder="검색어를 입력하세요"
               />
-            </a>
-          </Link>
-        </>
-      ) : (
-        <LoginForm />
-      )}
+            </Form.Group>
+            <InputGroup className="ml-24 mb-3 w-50 h-12">
+              <Form.Control
+                className="rounded-full border-none text-sm"
+                placeholder="검색어를 입력하세요"
+              />
+              <InputGroup.Append>
+                <InputGroup.Text className="text-gray-400 border-none bg-white h-12 rounded-br-full rounded-tr-full">
+                  <AiOutlineSearch />
+                </InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+            <div className="grid gap-x-0 grid-cols-2">
+              {mainPosts.map((post) => (
+                <ChatBoxCopy post={post} />
+              ))}
+            </div>
+          </>
+        )
+        : (
+          <LoginForm />
+        )}
     </AppLayout>
   );
 };
