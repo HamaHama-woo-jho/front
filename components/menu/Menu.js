@@ -1,14 +1,15 @@
 import React, { useCallback } from 'react';
 import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
-import { FiHome, FiUnlock, FiSettings } from 'react-icons/fi';
+import { Spinner } from 'react-bootstrap';
+import { FiHome, FiUnlock, FiLock, FiSettings } from 'react-icons/fi';
 import { RiProfileLine } from 'react-icons/ri';
 import { HiOutlinePencil } from 'react-icons/hi';
 import { MainTextWrapper, TextWrapper } from './style';
 import { logoutRequestAction } from '../../reducers/user';
 
 const Menu = () => {
-  const { isLoggedIn } = useSelector((state) => state.user);
+  const { me, logoutLoading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const onLogOut = useCallback(() => {
@@ -103,21 +104,31 @@ const Menu = () => {
               </a>
             </Link>
           </div>
-          {isLoggedIn
+          {me
             ? (
               <div className="flex items-center my-1 mx-3 text-gray-400">
-                <FiUnlock />
-                <TextWrapper className="ml-1" onClick={onLogOut}>
+                {logoutLoading
+                  ? (
+                    <Spinner size="sm" animation="border" className="pl-1" />
+                  )
+                  : <FiUnlock />}
+                <TextWrapper className="mx-1 cursor-pointer" onClick={onLogOut}>
                   Logout
                 </TextWrapper>
               </div>
             )
             : (
-              <div className="flex items-center my-1 mx-3 text-gray-400">
-                <FiUnlock />
-                <TextWrapper className="ml-1">
-                  Login
-                </TextWrapper>
+              <div className="my-1">
+                <Link href="/login" className="my-2">
+                  <a>
+                    <div className="flex items-center mx-3 text-gray-400">
+                      <FiLock />
+                      <TextWrapper className="ml-1">
+                        Login
+                      </TextWrapper>
+                    </div>
+                  </a>
+                </Link>
               </div>
             )}
         </div>

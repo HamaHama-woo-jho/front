@@ -49,6 +49,7 @@ const reducer = (state = initialState, action) => {
         loginError: null,
       };
     case LOGIN_SUCCESS:
+
       return {
         ...state,
         loginLoading: false,

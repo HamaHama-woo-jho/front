@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
+import Router from 'next/router';
 import { Form, Button } from 'react-bootstrap';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
@@ -22,6 +23,7 @@ const LoginForm = () => {
     e.preventDefault();
     console.log(id, password);
     dispatch(loginRequestAction({ id, password }));
+    Router.push('/');
   }, [id, password]);
 
   return (

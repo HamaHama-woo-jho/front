@@ -1,13 +1,19 @@
 import { all, fork, put, takeLatest, delay } from 'redux-saga/effects';
-import axios from 'axios';
-import { LOGIN_FAILURE, LOGIN_SUCCESS, LOGIN_REQUEST } from '../reducers/user';
+// import axios from 'axios';
+import {
+  LOGIN_FAILURE, LOGIN_SUCCESS, LOGIN_REQUEST,
+  LOGOUT_SUCCESS, LOGOUT_FAILURE, LOGOUT_REQUEST,
+} from '../reducers/user';
 
-function logInAPI(data) {
-  return axios.post('/api/login', data);
-}
+// function logInAPI(data) {
+//   return axios.post('/api/login', data);
+// }
+
+// function logOutAPI() {
+//   return axios.get('/api/logout');
+// }
 
 function* login(action) {
-  console.log('안녕하세요');
   try {
     yield delay(1000);
     yield put({
@@ -22,13 +28,31 @@ function* login(action) {
   }
 }
 
+function* logout() {
+  try {
+    yield delay(1000);
+    yield put({
+      type: LOGOUT_SUCCESS,
+    });
+  } catch (err) {
+    yield put({
+      type: LOGOUT_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+
 function* watchLogIn() {
-  console.log('로그인 리스너');
   yield takeLatest(LOGIN_REQUEST, login);
+}
+
+function* watchLogOut() {
+  yield takeLatest(LOGOUT_REQUEST, logout);
 }
 
 export default function* userSaga() {
   yield all([
     fork(watchLogIn),
+    fork(watchLogOut),
   ]);
 }
