@@ -38,7 +38,7 @@ const ChatBox = ({ post }) => {
   return (
     <Card className="border-none text-center shadow-md mx-auto my-3 w-72">
       <Card.Body className="pb-1">
-        <img src="https://thumbnail8.coupangcdn.com/thumbnails/remote/492x492ex/image/retail/images/511854261736331-ad4bc2d1-c0de-47c0-bef2-0492c8873ea0.jpg" alt="" />
+        <img src={post.img} alt="" />
         <Title>{post.title}</Title>
         <div className="w-1/3 pb-1 m-auto">
           <CircularProgressbar
@@ -84,12 +84,14 @@ const ChatBox = ({ post }) => {
           </span>
         </div>
         <div className="w-1/3 inline-block align-middle">
-          {isIn ? (
-            <PlayCircleOutlined
-              className="text-gray-400"
-              onClick={onClickJoin}
-            />
-          ) : (
+          {isIn
+            ? (
+              <PlayCircleOutlined
+                className="text-gray-400"
+                onClick={onClickJoin}
+              />
+            )
+            : (
               <PlayCircleTwoTone twoToneColor="#0080ff" onClick={onClickJoin} />
             )}
         </div>

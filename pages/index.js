@@ -1,45 +1,46 @@
-import React from 'react';
-import Link from 'next/link';
-import { useSelector } from 'react-redux';
-import { Button } from 'react-bootstrap';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import AppLayout from '../components/AppLayout';
-import LoginForm from '../components/LoginForm';
-import ChatBox from '../components/chatBox/ChatBox';
+import ChatBoxCopy from '../components/chatBox/ChatBoxCopy';
+import ToolBar from '../components/ToolBar';
+import { LOAD_POSTS_REQUEST } from '../reducers/post';
 
 const Home = () => {
-  const { isLoggedIn } = useSelector((state) => state.user);
-  const { mainPosts } = useSelector((state) => state.post);
+  const dispatch = useDispatch();
+  const { mainPosts, loadPostsLoading } = useSelector((state) => state.post);
+
+  useEffect(() => {
+    dispatch({
+      type: LOAD_POSTS_REQUEST,
+    });
+  }, []);
+
+  useEffect(() => {
+    function onScroll() {
+      if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
+        if (!loadPostsLoading) {
+          dispatch({
+            type: LOAD_POSTS_REQUEST,
+          });
+        }
+      }
+    }
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [loadPostsLoading]);
 
   return (
     <AppLayout>
-      {isLoggedIn ? (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            {mainPosts.map((post) => (
-              <ChatBox post={post} />
-            ))}
-          </div>
-          <Link href="/createchatbox">
-            <a>
-              <Button
-                style={{
-                  backgroundColor: '#0080ff',
-                  bottom: 0,
-                  right: 0,
-                  position: 'fixed',
-                  margin: '40px',
-                  width: '50px',
-                  height: '50px',
-                  zIndex: 1,
-                }}
-                className="border-none rounded-full shadow-lg"
-              />
-            </a>
-          </Link>
-        </>
-      ) : (
-        <LoginForm />
-      )}
+      <>
+        <ToolBar />
+        <div className="grid gap-x-0 grid-cols-1 xl:grid-cols-2">
+          {mainPosts.map((post) => (
+            <ChatBoxCopy post={post} />
+          ))}
+        </div>
+      </>
     </AppLayout>
   );
 };

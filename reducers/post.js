@@ -2,6 +2,9 @@ import faker from 'faker';
 import shortId from 'shortid';
 
 export const initialState = {
+  loadPostsLoading: false,
+  loadPostsDone: false,
+  loadPostsError: null,
   mainPosts: [
     {
       id: 1,
@@ -30,37 +33,38 @@ export const initialState = {
   ],
 };
 
-const generateDummyPost = (number) =>
-  Array(number)
-    .fill()
-    .map(() => ({
-      id: shortId.generate(),
-      User: {
-        id: shortId.generate(),
-        nickname: faker.name.findName(),
-      },
-      title: faker.name.jobTitle(),
-      personnel: 7,
-      curPersonnel: 1,
-      from: faker.date.past(),
-      to: faker.date.future(),
-      location: '어은동',
-      price: Number(faker.commerce.price()) * 100,
-      link: 'http://item.gmarket.co.kr/Item?goodscode=995511248',
-      textArea: faker.lorem.sentence(),
-      tag: [
-        {
-          content: '수능대박',
-        },
-        {
-          content: '컴싸',
-        },
-        {
-          content: '모나미',
-        },
-      ],
-    }));
+export const generateDummyPost = (number) => Array(number).fill().map(() => ({
+  id: shortId.generate(),
+  User: {
+    id: shortId.generate(),
+    nickname: faker.name.findName(),
+  },
+  title: faker.name.jobTitle(),
+  img: faker.image.image(),
+  personnel: 7,
+  curPersonnel: 1,
+  from: faker.date.past(),
+  to: faker.date.future(),
+  location: '어은동',
+  price: Number(faker.commerce.price()) * 100,
+  link: 'http://item.gmarket.co.kr/Item?goodscode=995511248',
+  textArea: faker.lorem.sentence(),
+  tag: [
+    {
+      content: '수능대박',
+    },
+    {
+      content: '컴싸',
+    },
+    {
+      content: '모나미',
+    },
+  ],
+}));
 
+export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
+export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
+export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
 export const ADD_CHAT = 'ADD_CHAT';
 
 export const addChatAction = (data) => ({
@@ -68,15 +72,40 @@ export const addChatAction = (data) => ({
   data,
 });
 
+export const loadPostsRequestAction = () => ({
+  type: LOAD_POSTS_REQUEST,
+});
+
 const reducer = (
   state = { ...initialState, mainPosts: generateDummyPost(20) },
-  action
+  action,
 ) => {
   switch (action.type) {
     case ADD_CHAT:
       return {
         ...state,
-        mainPosts: [action.data, ...state.mainPosts], //postAdded 없으면 어떻게 됨?
+        mainPosts: [action.data, ...state.mainPosts],
+      };
+    case LOAD_POSTS_REQUEST:
+      return {
+        ...state,
+        loadPostsLoading: true,
+        loadPostsDone: false,
+        loadPostError: null,
+      };
+    case LOAD_POSTS_SUCCESS:
+      return {
+        ...state,
+        loadPostsLoading: false,
+        loadPostsDone: true,
+        mainPosts: [...action.data, ...state.mainPosts],
+      };
+    case LOAD_POSTS_FAILURE:
+      return {
+        ...state,
+        loadPostsLoading: true,
+        loadPostsDone: false,
+        loadPostError: action.error,
       };
     default:
       return state;

@@ -1,22 +1,18 @@
 import styled from 'styled-components';
-import { Card } from 'react-bootstrap';
 
-export const Price = styled.span`
+export const MainTextWrapper = styled.span`
   font-family: 'NanumSquare', sans-serif !important;
   font-bold: 600;
-  font-size: 15px;
-`;
-
-export const Title = styled(Card.Title)`
-  font-family: 'NanumSquare', sans-serif !important;
-  font-size: 15px;
+  font-size: 25px;
 `;
 
 export const TextWrapper = styled.span`
   font-family: 'NanumSquare', sans-serif !important;
-  font-size: 12px;
+  font-size: 20px;
 `;
 
-export const HashTag = styled.span`
+export const TextWrapperClicked = styled.span`
   font-family: 'NanumSquare', sans-serif !important;
+  font-size: 20px;
+  color: #0080ff;
 `;

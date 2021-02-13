@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Spinner } from 'react-bootstrap';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
-import { loginAction } from '../reducers/user';
+import { loginRequestAction } from '../reducers/user';
 
 const FormWrapper = styled(Form.Control)`
   border-radius: 9999px;
@@ -14,16 +14,18 @@ const FormWrapper = styled(Form.Control)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const { loginLoding } = useSelector((state) => state.user);
   const [id, onChangeId] = useInput('');
   const [password, onChangePassword] = useInput('');
 
-  const onLogIn = useCallback(() => {
+  const onLogIn = useCallback((e) => {
+    e.preventDefault();
     console.log(id, password);
-    dispatch(loginAction({ id, password }));
+    dispatch(loginRequestAction({ id, password }));
   }, [id, password]);
 
   return (
-    <div className="shadow-md mt-24 mb-24 mx-auto w-96 bg-white rounded-2xl">
+    <div className="shadow-md mt-10 mb-24 mx-auto w-96 bg-white rounded-2xl">
       <div className="border-none text-center px-4 pt-2 pb-5 mt-3">
         <div className="mb-4 mt-2">
           <span
@@ -74,7 +76,9 @@ const LoginForm = () => {
                 type="submit"
                 variant="primary w-full rounded-full text-sm mb-2 py-2"
               >
-                로그인
+                {loginLoding
+                  ? <Spinner size="sm" animation="border" className="pl-1" />
+                  : '로그인'}
               </Button>
               <Link href="/signup">
                 <a>

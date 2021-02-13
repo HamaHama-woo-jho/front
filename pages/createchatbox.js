@@ -5,6 +5,7 @@ import { Form, Button } from 'react-bootstrap';
 import AppLayout from '../components/AppLayout';
 import Calender from '../components/Calendar';
 import useInput from '../hooks/useInput';
+import getImageSrc from '../api/getImageSrc';
 
 import { addChatAction } from '../reducers/post';
 
@@ -38,28 +39,23 @@ const createchatbox = () => {
   const [textArea, onChangeTextArea] = useInput(data.textArea);
   const [location, onChangeLocaton] = useInput(data.location);
 
-  const plusPageCount = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (page === 0) {
-        setData({ ...data, title, link, price, personnel });
-      }
-      setPage(page + 1);
-    },
-    [page, title, link, price, personnel]
-  );
+  const plusPageCount = useCallback((e) => {
+    e.preventDefault();
+    if (page === 0) {
+      getImageSrc(link);
+      setData({ ...data, title, link, price, personnel });
+    }
+    setPage(page + 1);
+  }, [page, title, link, price, personnel]);
 
-  const minusPageCount = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (page === 2) {
-        setData({ ...data, textArea, location });
-      }
-      setPage(page - 1);
-      console.log(data);
-    },
-    [page, title, link, price, personnel, textArea, location]
-  );
+  const minusPageCount = useCallback((e) => {
+    e.preventDefault();
+    if (page === 2) {
+      setData({ ...data, textArea, location });
+    }
+    setPage(page - 1);
+    console.log(data);
+  }, [page, title, link, price, personnel, textArea, location]);
 
   const onCreate = useCallback(() => {
     dispatch(addChatAction({ ...data, textArea, location }));
@@ -160,7 +156,7 @@ const createchatbox = () => {
 
   return (
     <AppLayout className="h-full">
-      <div className="bg-white w-96 rounded-xl shadow-md mx-auto mt-8 py-2 px-4">
+      <div className="bg-white w-96 rounded-xl shadow-md mx-auto mt-8 py-2 px-4 mb-5">
         <Form>
           <div className="w-full text-center text-2xl mt-8 mb-4">
             <span
@@ -203,33 +199,37 @@ const createchatbox = () => {
           {renderPage(page)}
         </Form>
         <div className="flex justify-between my-4">
-          {page === 0 ? (
-            <></>
-          ) : (
-            <Button
-              variant="secondary"
-              onClick={minusPageCount}
-              className="rounded-full w-full mx-1"
-            >
-              이전
-            </Button>
-          )}
-          {page === 2 ? (
-            <Link href="/">
-              <a className="rounded-full w-full mx-1">
-                <Button className="rounded-full w-full" onClick={onCreate}>
-                  제출
-                </Button>
-              </a>
-            </Link>
-          ) : (
-            <Button
-              onClick={plusPageCount}
-              className="rounded-full w-full mx-1"
-            >
-              다음
-            </Button>
-          )}
+          {page === 0
+            ? (
+              <></>
+            )
+            : (
+              <Button
+                variant="secondary"
+                onClick={minusPageCount}
+                className="rounded-full w-full mx-1"
+              >
+                이전
+              </Button>
+            )}
+          {page === 2
+            ? (
+              <Link href="/">
+                <a className="rounded-full w-full mx-1">
+                  <Button className="rounded-full w-full" onClick={onCreate}>
+                    제출
+                  </Button>
+                </a>
+              </Link>
+            )
+            : (
+              <Button
+                onClick={plusPageCount}
+                className="rounded-full w-full mx-1"
+              >
+                다음
+              </Button>
+            )}
         </div>
       </div>
     </AppLayout>

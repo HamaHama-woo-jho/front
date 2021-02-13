@@ -8,11 +8,9 @@ class MyDocument extends Document {
     const originalRenderPage = ctx.renderPage;
 
     try {
-      ctx.renderPage = () =>
-        originalRenderPage({
-          enhanceApp: (App) => (props) =>
-            sheet.collectStyles(<App {...props} />),
-        });
+      ctx.renderPage = () => originalRenderPage({
+        enhanceApp: (App) => (props) => sheet.collectStyles(<App {...props} />),
+      });
 
       const initialProps = await Document.getInitialProps(ctx);
       return {
@@ -45,7 +43,7 @@ class MyDocument extends Document {
             href="https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css"
           />
         </Head>
-        <body style={{ height: '100vh', backgroundColor: '#fffded' }}>
+        <body style={{ height: '100vh', backgroundColor: '#f4f5f9' }}>
           <Main />
           <NextScript />
         </body>
