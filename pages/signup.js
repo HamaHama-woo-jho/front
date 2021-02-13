@@ -1,12 +1,11 @@
-import React, { useRef, useState, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, Row, Col, Button } from 'react-bootstrap';
-import Router from 'next/router';
 import styled from 'styled-components';
 import Link from 'next/link';
 import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
-import { signupRequsetAction } from '../reducers/user';
+import { signupRequsetAction, checkidAction } from '../reducers/user';
 
 const FormWrapper = styled(Form.Control)`
   border-radius: 9999px;
@@ -63,6 +62,30 @@ const signup = () => {
   });
 
   const dispatch = useDispatch();
+  const { checkDone, checkError } = useSelector((state) => state.user);
+
+  const [uniqueID, setUniqueID] = useState(true);
+  const [validIDErr, setValidIDErr] = useState(false);
+  const [checkID, setcheckID] = useState(false);
+  const [checkIDErr, setcheckIDErr] = useState(false);
+
+  useEffect(() => {
+    if (checkError) {
+      setUniqueID(false);
+      setcheckID(true);
+    }
+    if (checkDone) {
+      setUniqueID(true);
+      setcheckID(true);
+    }
+  }, [checkDone, checkError, checkID]);
+
+  const checkId = (e) => {
+    e.preventDefault();
+    setcheckID(true);
+    dispatch(checkidAction({ id }));
+  };
+
   const onSubmit = useCallback((e) => {
     e.preventDefault();
     if (password !== passwordCheck) {
@@ -71,19 +94,14 @@ const signup = () => {
     if (!term) {
       return setTermError(true);
     }
-    console.log(id, nickname, password);
-    dispatch(signupRequsetAction({ id, nickname }));
-    // 서버에 연결해서 회원가입 정보를 db에 저장
-    // 에러 없이 성공적으로 저장되었다면 index페이지로 전환
-    // Router.push('/');
+    if (!checkID) {
+      return setcheckIDErr(true);
+    }
+    if (!uniqueID) {
+      return setValidIDErr(true);
+    }
+    dispatch(signupRequsetAction({ id, nickname, password }));
   }, [password, passwordCheck, term]);
-
-  const checkId = () => {
-    console.log(idRef);
-    // 서버와 통신하여 중복 id 있는지 검사
-    // 검사해서 통과되지 않았다면 가입할 수 없도록 하기
-    // 검사하지 않았다면 가입할 수 없도록 하기
-  };
 
   return (
     <AppLayout>
@@ -130,6 +148,9 @@ const signup = () => {
                     <Button className="border rounded-full border-blue-400" variant="outline-info" onClick={checkId}>중복 확인</Button>
                   </Col>
                 </Row>
+                {uniqueID
+                  ? (<></>)
+                  : (<ErrorMessage className="mb-3">이미 사용중인 아이디입니다.</ErrorMessage>)}
               </Form.Group>
               <Form.Group>
                 <FormWrapper className="mb-3" placeholder="닉네임" onChange={onChangeNickname} value={nickname} ref={nickRef} type="text" required />
@@ -209,6 +230,8 @@ const signup = () => {
                   <label className="ml-1 text-sm">하마하마 이용약관과 개인정보 방침에 동의합니다.</label>
                   <br />
                   {termError && <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>}
+                  {checkIDErr && <ErrorMessage>아이디 중복 확인을 해 주셔야 합니다.</ErrorMessage>}
+                  {validIDErr && <ErrorMessage>아이디를 다시 확인해 주세요.</ErrorMessage>}
                 </div>
               </div>
               <div className="mt-10">

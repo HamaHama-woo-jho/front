@@ -8,6 +8,7 @@ import rootSaga from '../sagas';
 
 const loggerMiddleware = ({ dispatch, getState }) => (next) => (action) => {
   console.log(action);
+  // console.log('next is', next(action));
   return next(action);
 };
 

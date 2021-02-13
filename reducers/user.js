@@ -10,6 +10,9 @@ const initialState = {
   signupLoading: false,
   signupDone: false,
   signupError: null,
+  checkLoading: false,
+  checkDone: false,
+  checkError: null,
   me: null,
   signUpData: {},
   loginData: {},
@@ -27,6 +30,10 @@ export const SIGNUP_REQUEST = 'SIGNUP_REQUEST';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
 
+export const CHECKID_REQUEST = 'CHECKID_REQUEST';
+export const CHECKID_SUCCESS = 'CHECKID_SUCCESS';
+export const CHECKID_FAILURE = 'CHECKID_FAILURE';
+
 export const loginRequestAction = (data) => ({
   type: LOGIN_REQUEST,
   data,
@@ -38,6 +45,11 @@ export const logoutRequestAction = () => ({
 
 export const signupRequsetAction = (data) => ({
   type: SIGNUP_REQUEST,
+  data,
+});
+
+export const checkidAction = (data) => ({
+  type: CHECKID_REQUEST,
   data,
 });
 
@@ -106,6 +118,25 @@ const reducer = (state = initialState, action) => {
         ...state,
         signupLoading: false,
         signupError: action.error,
+      };
+    case CHECKID_REQUEST:
+      return {
+        ...state,
+        checkLoading: true,
+        checkDone: false,
+        checkError: null,
+      };
+    case CHECKID_SUCCESS:
+      return {
+        ...state,
+        checkLoading: false,
+        checkDone: true,
+      };
+    case CHECKID_FAILURE:
+      return {
+        ...state,
+        checkLoading: false,
+        checkError: 1,
       };
     case 'SIGN_UP':
       return {
