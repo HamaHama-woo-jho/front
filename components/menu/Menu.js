@@ -29,7 +29,7 @@ const Menu = () => {
         zIndex: 100,
       }}
     >
-      <div className="m-2 inline-block">
+      <div className="w-full inline-block">
         <div className="mb-8">
           <Link href="/">
             <a>
@@ -72,9 +72,9 @@ const Menu = () => {
             </a>
           </Link>
         </div>
-        <div className="flex flex-col">
+        <div className="w-full flex flex-col">
           <MainTextWrapper className="mx-3 my-2 text-gray-500">Main Menu</MainTextWrapper>
-          <div className="my-1">
+          <div className="py-2 w-full hover:bg-blue-100">
             <Link href="/">
               <a>
                 <div className="flex items-center mx-3 text-gray-400">
@@ -84,7 +84,7 @@ const Menu = () => {
               </a>
             </Link>
           </div>
-          <div className="my-1">
+          <div className="py-2 w-full hover:bg-blue-100">
             <Link href="/profile" className="my-2">
               <a>
                 <div className="flex items-center mx-3 text-gray-400">
@@ -94,7 +94,7 @@ const Menu = () => {
               </a>
             </Link>
           </div>
-          <div className="my-1">
+          <div className="py-2 w-full hover:bg-blue-100">
             <Link href="/createchatbox" className="my-2">
               <a>
                 <div className="flex items-center mx-3 text-gray-400">
@@ -106,19 +106,21 @@ const Menu = () => {
           </div>
           {me
             ? (
-              <div className="flex items-center my-1 mx-3 text-gray-400">
-                {logoutLoading
-                  ? (
-                    <Spinner size="sm" animation="border" className="pl-1" />
-                  )
-                  : <FiUnlock />}
-                <TextWrapper className="mx-1 cursor-pointer" onClick={onLogOut}>
-                  Logout
-                </TextWrapper>
+              <div className="py-2 w-full hover:bg-blue-100">
+                <div className="flex items-center mx-3 text-gray-400">
+                  {logoutLoading
+                    ? (
+                      <Spinner size="sm" animation="border" className="pl-1" />
+                    )
+                    : <FiUnlock />}
+                  <TextWrapper className="mx-1 cursor-pointer" onClick={onLogOut}>
+                    Logout
+                  </TextWrapper>
+                </div>
               </div>
             )
             : (
-              <div className="my-1">
+              <div className="py-2 w-full hover:bg-blue-100">
                 <Link href="/login" className="my-2">
                   <a>
                     <div className="flex items-center mx-3 text-gray-400">
@@ -134,7 +136,7 @@ const Menu = () => {
         </div>
         <div className="flex flex-col mt-4">
           <MainTextWrapper className="mx-3 my-2 text-gray-500">Settings</MainTextWrapper>
-          <div className="my-1">
+          <div className="py-2 w-full hover:bg-blue-100">
             <Link href="/">
               <a>
                 <div className="flex items-center mx-3 text-gray-400">

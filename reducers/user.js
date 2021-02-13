@@ -1,3 +1,5 @@
+import Router from 'next/router';
+
 const initialState = {
   loginLoading: false,
   loginDone: false,
@@ -34,8 +36,8 @@ export const logoutRequestAction = () => ({
   type: LOGOUT_REQUEST,
 });
 
-export const signupAction = (data) => ({
-  type: 'SIGN_UP',
+export const signupRequsetAction = (data) => ({
+  type: SIGNUP_REQUEST,
   data,
 });
 
@@ -49,7 +51,7 @@ const reducer = (state = initialState, action) => {
         loginError: null,
       };
     case LOGIN_SUCCESS:
-
+      Router.push('/');
       return {
         ...state,
         loginLoading: false,
@@ -70,6 +72,7 @@ const reducer = (state = initialState, action) => {
         logoutError: null,
       };
     case LOGOUT_SUCCESS:
+      Router.push('/');
       return {
         ...state,
         logoutLoading: false,
@@ -81,6 +84,28 @@ const reducer = (state = initialState, action) => {
         ...state,
         logoutLoading: false,
         logoutError: action.error,
+      };
+    case SIGNUP_REQUEST:
+      return {
+        ...state,
+        signupLoading: true,
+        signupDone: false,
+        signupError: null,
+      };
+    case SIGNUP_SUCCESS:
+      Router.push('/');
+      return {
+        ...state,
+        signupLoading: false,
+        signupDone: true,
+        loginDone: true,
+        me: action.data,
+      };
+    case SIGNUP_FAILURE:
+      return {
+        ...state,
+        signupLoading: false,
+        signupError: action.error,
       };
     case 'SIGN_UP':
       return {

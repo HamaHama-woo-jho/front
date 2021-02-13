@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
-import { signupAction } from '../reducers/user';
+import { signupRequsetAction } from '../reducers/user';
 
 const FormWrapper = styled(Form.Control)`
   border-radius: 9999px;
@@ -72,10 +72,10 @@ const signup = () => {
       return setTermError(true);
     }
     console.log(id, nickname, password);
-    dispatch(signupAction({ id, nickname }));
+    dispatch(signupRequsetAction({ id, nickname }));
     // 서버에 연결해서 회원가입 정보를 db에 저장
     // 에러 없이 성공적으로 저장되었다면 index페이지로 전환
-    Router.push('/');
+    // Router.push('/');
   }, [password, passwordCheck, term]);
 
   const checkId = () => {

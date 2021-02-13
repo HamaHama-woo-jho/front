@@ -47,5 +47,6 @@
     "consistent-return": "off",
     "no-else-return": "off",
     "react/no-unescaped-entities": "off",
+    "max-len": "off",
   }
 }

@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Modal } from 'react-bootstrap';
+import { BsThreeDots } from 'react-icons/bs';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import { Price, Title, TextWrapper } from './style';
+import DetailCard from './DetailCard';
 
 const ChatBox = ({ post }) => {
+  const [flip, setFlip] = useState(false);
+  const onClickDetail = () => {
+    console.log('클릭되었습니다.');
+    // e.preventDefualt();
+    setFlip(!flip);
+  };
+
   const calcDateDiff = (a, b) => {
     const oneDay = 1000 * 60 * 60 * 24;
     return Math.round((Date.parse(b) - Date.parse(a)) / oneDay);
@@ -32,7 +43,26 @@ const ChatBox = ({ post }) => {
         className="overflow-hidden rounded-xl"
         style={{ width: '6rem' }}
       >
-        <img src={post.img} alt="" className=" w-auto h-full inline" />
+        {flip
+          ? (
+            <div className="m-2">
+              <CircularProgressbar
+                value={calcProgressBar(post.from, post.to, new Date())}
+                text={calcDate(post.from, post.to, new Date())}
+                styles={buildStyles({
+                  textSize: '20px',
+                  pathTransitionDuration: 0.5,
+                  pathColor: '#0080ff',
+                  textColor: '#0080ff',
+                  trailColor: '#d6d6d6',
+                  backgroundColor: '#3e98c7',
+                })}
+              />
+            </div>
+          )
+          : (
+            <img src={post.img} alt="" className=" w-auto h-full inline" />
+          )}
       </div>
       <div
         className="px-3 py-2 flex flex-col text-left"
@@ -45,8 +75,13 @@ const ChatBox = ({ post }) => {
           <TextWrapper> {post.curPersonnel} / {post.personnel}</TextWrapper>
         </div>
         <div>
-          <Price>{num2currency(Math.round(post.price / post.personnel))}</Price>
-          <TextWrapper> 원/인</TextWrapper>
+          <div className="inline-block">
+            <Price>{num2currency(Math.round(post.price / post.personnel))}</Price>
+            <TextWrapper> 원/인</TextWrapper>
+          </div>
+          <div className="mx-3 inline-block text-gray-400 cursor-pointer">
+            <BsThreeDots onClick={onClickDetail} />
+          </div>
         </div>
       </div>
     </div>

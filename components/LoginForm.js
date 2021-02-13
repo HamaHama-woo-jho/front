@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
-import Router from 'next/router';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Spinner } from 'react-bootstrap';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
 import { loginRequestAction } from '../reducers/user';
@@ -23,7 +22,6 @@ const LoginForm = () => {
     e.preventDefault();
     console.log(id, password);
     dispatch(loginRequestAction({ id, password }));
-    Router.push('/');
   }, [id, password]);
 
   return (
@@ -75,11 +73,12 @@ const LoginForm = () => {
             </Form.Group>
             <Form.Group>
               <Button
-                loading={loginLoding}
                 type="submit"
                 variant="primary w-full rounded-full text-sm mb-2 py-2"
               >
-                로그인
+                {loginLoding
+                  ? <Spinner size="sm" animation="border" className="pl-1" />
+                  : '로그인'}
               </Button>
               <Link href="/signup">
                 <a>
