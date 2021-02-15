@@ -24,9 +24,9 @@ function checkIdAPI(data) {
 }
 
 function* login(action) {
-  const result = yield call(logInAPI, action.data);
-  console.log(result);
   try {
+    const result = yield call(logInAPI, action.data);
+    console.log(result);
     yield put({
       type: LOGIN_SUCCESS,
       data: result.data,
@@ -34,14 +34,14 @@ function* login(action) {
   } catch (err) {
     yield put({
       type: LOGIN_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
 
 function* logout() {
-  yield call(logOutAPI);
   try {
+    yield call(logOutAPI);
     yield put({
       type: LOGOUT_SUCCESS,
     });
