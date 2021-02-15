@@ -35,7 +35,7 @@ const Home = () => {
     <AppLayout>
       <>
         <ToolBar />
-        <div className="grid gap-x-0 grid-cols-1 xl:grid-cols-2">
+        <div className="grid gap-x-0 grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
           {mainPosts.map((post) => (
             <ChatBoxCopy post={post} />
           ))}

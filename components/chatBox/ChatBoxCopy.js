@@ -37,11 +37,11 @@ const ChatBox = ({ post }) => {
   return (
     <div
       className="flex border-none text-center shadow-md mx-auto my-3 rounded-xl bg-white justify-between"
-      style={{ width: '20rem', height: '6rem' }}
+      style={{ width: '22rem', height: '7rem' }}
     >
       <div
         className="overflow-hidden rounded-xl"
-        style={{ width: '6rem' }}
+        style={{ width: '7rem' }}
       >
         {flip
           ? (
@@ -65,7 +65,7 @@ const ChatBox = ({ post }) => {
           )}
       </div>
       <div
-        className="px-3 py-2 flex flex-col text-left"
+        className="px-1 py-3 flex flex-col text-left"
         style={{ width: '14rem' }}
       >
         <Title>{post.title}</Title>
