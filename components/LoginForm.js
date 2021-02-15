@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import { Form, Button, Spinner } from 'react-bootstrap';
@@ -14,9 +14,15 @@ const FormWrapper = styled(Form.Control)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { loginLoding } = useSelector((state) => state.user);
+  const { loginLoading, loginError } = useSelector((state) => state.user);
   const [id, onChangeId] = useInput('');
   const [password, onChangePassword] = useInput('');
+
+  useEffect(() => {
+    if (loginError) {
+      alert(loginError);
+    }
+  }, [loginError]);
 
   const onLogIn = useCallback((e) => {
     e.preventDefault();
@@ -76,7 +82,7 @@ const LoginForm = () => {
                 type="submit"
                 variant="primary w-full rounded-full text-sm mb-2 py-2"
               >
-                {loginLoding
+                {loginLoading
                   ? <Spinner size="sm" animation="border" className="pl-1" />
                   : '로그인'}
               </Button>

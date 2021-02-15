@@ -1,4 +1,4 @@
-import { all, fork, put, takeLatest, delay, call } from 'redux-saga/effects';
+import { all, fork, put, takeLatest, call } from 'redux-saga/effects';
 import axios from 'axios';
 import {
   LOGIN_FAILURE, LOGIN_SUCCESS, LOGIN_REQUEST,
@@ -7,13 +7,13 @@ import {
   CHECKID_SUCCESS, CHECKID_FAILURE, CHECKID_REQUEST,
 } from '../reducers/user';
 
-// function logInAPI(data) {
-//   return axios.post('/api/login', data);
-// }
+function logInAPI(data) {
+  return axios.post('/user/login', data);
+}
 
-// function logOutAPI() {
-//   return axios.get('/api/logout');
-// }
+function logOutAPI() {
+  return axios.post('/user/logout');
+}
 
 function signUpAPI(data) {
   return axios.post('/user', data);
@@ -24,11 +24,12 @@ function checkIdAPI(data) {
 }
 
 function* login(action) {
+  const result = yield call(logInAPI, action.data);
+  console.log(result);
   try {
-    yield delay(1000);
     yield put({
       type: LOGIN_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     yield put({
@@ -39,15 +40,15 @@ function* login(action) {
 }
 
 function* logout() {
+  yield call(logOutAPI);
   try {
-    yield delay(1000);
     yield put({
       type: LOGOUT_SUCCESS,
     });
   } catch (err) {
     yield put({
       type: LOGOUT_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -63,7 +64,7 @@ function* signUp(action) {
   } catch (err) {
     yield put({
       type: SIGNUP_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }

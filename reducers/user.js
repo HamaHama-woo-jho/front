@@ -89,7 +89,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         logoutLoading: false,
         logoutDone: true,
-        me: action.data,
+        me: null,
       };
     case LOGOUT_FAILURE:
       return {
