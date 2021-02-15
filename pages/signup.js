@@ -72,17 +72,16 @@ const signup = () => {
   useEffect(() => {
     if (checkError) {
       setUniqueID(false);
-      setcheckID(true);
     }
     if (checkDone) {
       setUniqueID(true);
-      setcheckID(true);
     }
-  }, [checkDone, checkError, checkID]);
+  }, [checkDone, checkError ]);
 
   const checkId = (e) => {
     e.preventDefault();
     setcheckID(true);
+    setcheckIDErr(false);
     dispatch(checkidAction({ id }));
   };
 
@@ -95,13 +94,14 @@ const signup = () => {
       return setTermError(true);
     }
     if (!checkID) {
+      console.log('여긴가요..?');
       return setcheckIDErr(true);
     }
     if (!uniqueID) {
       return setValidIDErr(true);
     }
     dispatch(signupRequsetAction({ id, nickname, password }));
-  }, [password, passwordCheck, term]);
+  }, [password, passwordCheck, term, checkID, uniqueID]);
 
   return (
     <AppLayout>
@@ -230,7 +230,9 @@ const signup = () => {
                   <label className="ml-1 text-sm">하마하마 이용약관과 개인정보 방침에 동의합니다.</label>
                   <br />
                   {termError && <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>}
-                  {checkIDErr && <ErrorMessage>아이디 중복 확인을 해 주셔야 합니다.</ErrorMessage>}
+                  {checkIDErr
+                    ? (<ErrorMessage>아이디 중복 확인을 해 주셔야 합니다.</ErrorMessage>)
+                    : <></>}
                   {validIDErr && <ErrorMessage>아이디를 다시 확인해 주세요.</ErrorMessage>}
                 </div>
               </div>
