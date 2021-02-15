@@ -5,15 +5,15 @@ import { Form, Button } from 'react-bootstrap';
 import AppLayout from '../components/AppLayout';
 import Calender from '../components/Calendar';
 import useInput from '../hooks/useInput';
-import getImageSrc from '../api/getImageSrc';
 
-import { addChatAction } from '../reducers/post';
+import { addChatRequestAction } from '../reducers/post';
 
 const initialData = {
   id: 1,
   User: {
-    id: 'jaegoo1199',
+    id: 'jaegoo',
     nickname: '재구몬',
+    password: 'worn981012',
   },
   title: '',
   personnel: 0,
@@ -42,7 +42,6 @@ const createchatbox = () => {
   const plusPageCount = useCallback((e) => {
     e.preventDefault();
     if (page === 0) {
-      getImageSrc(link);
       setData({ ...data, title, link, price, personnel });
     }
     setPage(page + 1);
@@ -58,7 +57,7 @@ const createchatbox = () => {
   }, [page, title, link, price, personnel, textArea, location]);
 
   const onCreate = useCallback(() => {
-    dispatch(addChatAction({ ...data, textArea, location }));
+    dispatch(addChatRequestAction({ ...data, textArea, location }));
   }, [textArea, location]);
 
   const renderPage = (key) => {
