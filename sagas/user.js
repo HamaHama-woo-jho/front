@@ -1,11 +1,16 @@
 import { all, fork, put, takeLatest, call } from 'redux-saga/effects';
 import axios from 'axios';
 import {
+  LOAD_MY_INFO_REQUEST, LOAD_MY_INFO_SUCCESS, LOAD_MY_INFO_FAILURE,
   LOGIN_FAILURE, LOGIN_SUCCESS, LOGIN_REQUEST,
   LOGOUT_SUCCESS, LOGOUT_FAILURE, LOGOUT_REQUEST,
   SIGNUP_SUCCESS, SIGNUP_FAILURE, SIGNUP_REQUEST,
   CHECKID_SUCCESS, CHECKID_FAILURE, CHECKID_REQUEST,
 } from '../reducers/user';
+
+function loadmyinfoAPI() {
+  return axios.get('/user');
+}
 
 function logInAPI(data) {
   return axios.post('/user/login', data);
@@ -21,6 +26,21 @@ function signUpAPI(data) {
 
 function checkIdAPI(data) {
   return axios.post('/user/checkid', data);
+}
+
+function* loadmyinfo(action) {
+  try {
+    const result = yield call(loadmyinfoAPI, action.data);
+    yield put({
+      type: LOAD_MY_INFO_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_MY_INFO_FAILURE,
+      error: err.response.data,
+    });
+  }
 }
 
 function* login(action) {
@@ -84,6 +104,10 @@ function* checkId(action) {
   }
 }
 
+function* watchLoadmyinfo() {
+  yield takeLatest(LOAD_MY_INFO_REQUEST, loadmyinfo);
+}
+
 function* watchLogIn() {
   yield takeLatest(LOGIN_REQUEST, login);
 }
@@ -102,6 +126,7 @@ function* watchChekId() {
 
 export default function* userSaga() {
   yield all([
+    fork(watchLoadmyinfo),
     fork(watchLogIn),
     fork(watchLogOut),
     fork(watchSignUp),

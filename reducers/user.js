@@ -1,6 +1,9 @@
 import Router from 'next/router';
 
 const initialState = {
+  loadmyinfoLoading: false,
+  loadmyinfoDone: false,
+  loadmyinfoError: null,
   loginLoading: false,
   loginDone: false,
   loginError: null,
@@ -17,6 +20,10 @@ const initialState = {
   signUpData: {},
   loginData: {},
 };
+
+export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
+export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
+export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -55,6 +62,26 @@ export const checkidAction = (data) => ({
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case LOAD_MY_INFO_REQUEST:
+      return {
+        ...state,
+        loadmyinfoLoading: true,
+        loadmyinfoDone: false,
+        loadmyinfoError: null,
+      };
+    case LOAD_MY_INFO_SUCCESS:
+      return {
+        ...state,
+        loadmyinfoLoading: false,
+        loadmyinfoDone: true,
+        me: action.data,
+      };
+    case LOAD_MY_INFO_FAILURE:
+      return {
+        ...state,
+        loadmyinfoLoading: false,
+        loadmyinfoError: action.error,
+      };
     case LOGIN_REQUEST:
       return {
         ...state,

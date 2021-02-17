@@ -1,16 +1,20 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import StackGrid from 'react-stack-grid';
 import AppLayout from '../components/AppLayout';
 import ChatBoxCopy from '../components/chatBox/ChatBoxCopy';
 import ToolBar from '../components/ToolBar';
 import { LOAD_POSTS_REQUEST } from '../reducers/post';
-import StackGrid from 'react-stack-grid';
+import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
 
 const Home = () => {
   const dispatch = useDispatch();
   const { mainPosts, loadPostsLoading } = useSelector((state) => state.post);
 
   useEffect(() => {
+    dispatch({
+      type: LOAD_MY_INFO_REQUEST,
+    });
     dispatch({
       type: LOAD_POSTS_REQUEST,
     });
