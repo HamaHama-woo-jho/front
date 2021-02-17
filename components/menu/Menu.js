@@ -74,7 +74,7 @@ const Menu = () => {
         </div>
         <div className="w-full flex flex-col">
           <MainTextWrapper className="mx-3 my-2 text-gray-500">Main Menu</MainTextWrapper>
-          <div className="py-2 w-full hover:bg-blue-100">
+          <div className="py-2 w-full hover:bg-yellow-100">
             <Link href="/">
               <a>
                 <div className="flex items-center mx-3 text-gray-400">
@@ -94,7 +94,7 @@ const Menu = () => {
               </a>
             </Link>
           </div>
-          <div className="py-2 w-full hover:bg-blue-100">
+          <div className="py-2 w-full hover:bg-red-100">
             <Link href="/createchatbox" className="my-2">
               <a>
                 <div className="flex items-center mx-3 text-gray-400">
@@ -106,7 +106,7 @@ const Menu = () => {
           </div>
           {me
             ? (
-              <div className="py-2 w-full hover:bg-blue-100">
+              <div className="py-2 w-full hover:bg-tilt-100">
                 <div className="flex items-center mx-3 text-gray-400">
                   {logoutLoading
                     ? (

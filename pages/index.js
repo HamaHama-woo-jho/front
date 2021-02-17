@@ -4,6 +4,7 @@ import AppLayout from '../components/AppLayout';
 import ChatBoxCopy from '../components/chatBox/ChatBoxCopy';
 import ToolBar from '../components/ToolBar';
 import { LOAD_POSTS_REQUEST } from '../reducers/post';
+import StackGrid from 'react-stack-grid';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -34,12 +35,16 @@ const Home = () => {
   return (
     <AppLayout>
       <>
-        <ToolBar />
-        <div className="grid gap-x-0 grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
-          {mainPosts.map((post) => (
-            <ChatBoxCopy post={post} />
-          ))}
+        <div>
+          <ToolBar className="m-auto" />
         </div>
+        <StackGrid columnWidth={280} gutterWidth={3} gutterHeight={25}>
+          {mainPosts.map((post) => (
+            <div>
+              <ChatBoxCopy post={post} />
+            </div>
+          ))}
+        </StackGrid>
       </>
     </AppLayout>
   );
