@@ -3,21 +3,21 @@ import PropTypes from 'prop-types';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import Helmet from 'react-helmet';
 import 'react-day-picker/lib/style.css';
-import { RedoOutlined } from '@ant-design/icons';
+// import { RedoOutlined } from '@ant-design/icons';
 
 const Calender = ({ data, setData }) => {
   const [from, setFrom] = useState(data.from);
   const [to, setTo] = useState(data.to);
 
-  const handleResetClick = useCallback(
-    (e) => {
-      e.preventDefault();
-      setFrom(undefined);
-      setTo(undefined);
-      setData({ ...data, from: undefined, to: undefined });
-    },
-    [from, to],
-  );
+  // const handleResetClick = useCallback(
+  //   (e) => {
+  //     e.preventDefault();
+  //     setFrom(undefined);
+  //     setTo(undefined);
+  //     setData({ ...data, from: undefined, to: undefined });
+  //   },
+  //   [from, to],
+  // );
 
   const handleDayClick = useCallback(
     (day) => {
@@ -31,17 +31,6 @@ const Calender = ({ data, setData }) => {
 
   return (
     <div className="text-center">
-      <div className="mx-4 mb-2">
-        {!from && !to && '날짜를 선택하세요'}
-        {from && !to && '마지막 날짜를 선택하세요'}
-        {from && to && '날짜를 확인하세요'}
-        {from && to && (
-          <RedoOutlined
-            className="inline-block align-middle px-2 pb-1"
-            onClick={handleResetClick}
-          />
-        )}
-      </div>
       <DayPicker
         className="Selectable bg-white"
         numberOfMonths={1}
@@ -50,21 +39,6 @@ const Calender = ({ data, setData }) => {
         onDayClick={handleDayClick}
         disabledDays={{ before: new Date() }}
       />
-      <div className="mx-10 my-2">
-        <div className="flex justify-between">
-          {from && from.toLocaleDateString() && (
-            <div className="rounded-full shadow-md py-2 px-3">
-              {from.toLocaleDateString()}
-            </div>
-          )}
-          {to && to.toLocaleDateString() && <div className="pt-2">~</div>}
-          {to && to.toLocaleDateString() && (
-            <div className="rounded-full shadow-md py-2 px-3">
-              {to.toLocaleDateString()}
-            </div>
-          )}
-        </div>
-      </div>
       <Helmet>
         <style>
           {`

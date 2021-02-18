@@ -1,36 +1,63 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
 import { Spinner } from 'react-bootstrap';
-import { FiHome, FiUnlock, FiLock, FiSettings } from 'react-icons/fi';
-import { RiProfileLine } from 'react-icons/ri';
+import { FiUnlock, FiLock } from 'react-icons/fi';
+import { BsFillPersonFill } from 'react-icons/bs';
 import { HiOutlinePencil } from 'react-icons/hi';
-import { MainTextWrapper, TextWrapper } from './style';
+import { TextWrapper } from './style';
 import { logoutRequestAction } from '../../reducers/user';
 
 const Menu = () => {
   const { me, logoutLoading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const [isHoverLog, setIsHoverLog] = useState(false);
+  const [isHoverCreate, setIsHoverCreate] = useState(false);
+  const [isHoverProfile, setIsHoverProfile] = useState(false);
 
   const onLogOut = useCallback(() => {
     dispatch(logoutRequestAction());
   }, []);
 
+  const onHover = useCallback(() => {
+    setIsHoverLog(true);
+  }, [isHoverLog]);
+
+  const onHoverLeave = useCallback(() => {
+    setIsHoverLog(false);
+  }, [isHoverLog]);
+
+  const onHoverCreate = useCallback(() => {
+    setIsHoverCreate(true);
+  }, [isHoverCreate]);
+
+  const onHoverCreateLeave = useCallback(() => {
+    setIsHoverCreate(false);
+  }, [isHoverCreate]);
+
+  const onHoverProfile = useCallback(() => {
+    setIsHoverProfile(true);
+  }, [isHoverProfile]);
+
+  const onHoverProfileLeave = useCallback(() => {
+    setIsHoverProfile(false);
+  }, [isHoverProfile]);
+
   return (
     <div
-      className="py-3 shadow-md"
+      className="py-4 shadow-md"
       style={{
-        width: '16rem',
         backgroundColor: 'white',
         position: 'fixed',
         top: 0,
-        bottom: 0,
         left: 0,
+        right: 0,
         zIndex: 100,
       }}
     >
-      <div className="w-full inline-block">
-        <div className="mb-8">
+      <div className="w-full flex">
+        <div className="w-1/3" />
+        <div className="w-1/3 text-center my-auto">
           <Link href="/">
             <a>
               <span
@@ -72,80 +99,98 @@ const Menu = () => {
             </a>
           </Link>
         </div>
-        <div className="w-full flex flex-col">
-          <MainTextWrapper className="mx-3 my-2 text-gray-500">Main Menu</MainTextWrapper>
-          <div className="py-2 w-full hover:bg-yellow-100">
-            <Link href="/">
+        <div className="w-1/3 flex justify-end">
+          <div>
+            <Link href="/profile">
               <a>
-                <div className="flex items-center mx-3 text-gray-400">
-                  <FiHome />
-                  <TextWrapper className="ml-1">Home</TextWrapper>
+                <div
+                  onMouseEnter={onHoverProfile}
+                  onMouseLeave={onHoverProfileLeave}
+                  className="border rounded-full flex items-center mx-3 text-gray-400 w-20 h-8 justify-center"
+                >
+                  {isHoverProfile
+                    ? (
+                      <BsFillPersonFill />
+                    )
+                    : (
+                      <TextWrapper className="ml-1">
+                        내 정보
+                      </TextWrapper>
+                    )}
                 </div>
               </a>
             </Link>
           </div>
-          <div className="py-2 w-full hover:bg-blue-100">
-            <Link href="/profile" className="my-2">
+          <div>
+            <Link href="/createchatbox">
               <a>
-                <div className="flex items-center mx-3 text-gray-400">
-                  <RiProfileLine />
-                  <TextWrapper className="ml-1">Profile</TextWrapper>
-                </div>
-              </a>
-            </Link>
-          </div>
-          <div className="py-2 w-full hover:bg-red-100">
-            <Link href="/createchatbox" className="my-2">
-              <a>
-                <div className="flex items-center mx-3 text-gray-400">
-                  <HiOutlinePencil />
-                  <TextWrapper className="ml-1 text-gray-400">Create</TextWrapper>
+                <div
+                  onMouseEnter={onHoverCreate}
+                  onMouseLeave={onHoverCreateLeave}
+                  className="border rounded-full flex items-center mx-3 text-gray-400 w-20 h-8 justify-center"
+                >
+                  {isHoverCreate
+                    ? (
+                      <HiOutlinePencil />
+                    )
+                    : (
+                      <TextWrapper className="ml-1">
+                        방 만들기
+                      </TextWrapper>
+                    )}
                 </div>
               </a>
             </Link>
           </div>
           {me
             ? (
-              <div className="py-2 w-full hover:bg-tilt-100">
-                <div className="flex items-center mx-3 text-gray-400">
-                  {logoutLoading
-                    ? (
-                      <Spinner size="sm" animation="border" className="pl-1" />
-                    )
-                    : <FiUnlock />}
-                  <TextWrapper className="mx-1 cursor-pointer" onClick={onLogOut}>
-                    Logout
-                  </TextWrapper>
-                </div>
+              <div
+                onMouseEnter={onHover}
+                onMouseLeave={onHoverLeave}
+                className="border rounded-full flex items-center mx-3 text-gray-400 w-20 h-8 justify-center"
+              >
+                {logoutLoading
+                  ? (
+                    <Spinner size="sm" animation="border" className="pl-1" />
+                  )
+                  : (
+                    <>
+                      {isHoverLog
+                        ? (
+                          <FiUnlock onClick={onLogOut} className="cursor-pointer" />
+                        )
+                        : (
+                          <TextWrapper className="ml-1 cursor-pointer">
+                            로그아웃
+                          </TextWrapper>
+                        )}
+                    </>
+                  )}
               </div>
             )
             : (
-              <div className="py-2 w-full hover:bg-blue-100">
-                <Link href="/login" className="my-2">
+              <div>
+                <Link href="/login">
                   <a>
-                    <div className="flex items-center mx-3 text-gray-400">
-                      <FiLock />
-                      <TextWrapper className="ml-1">
-                        Login
-                      </TextWrapper>
+                    <div
+                      onMouseEnter={onHover}
+                      onMouseLeave={onHoverLeave}
+                      className="border rounded-full flex items-center mx-3 text-gray-400 w-20 h-8 justify-center"
+                    >
+                      {isHoverLog
+                        ? (
+                          <FiLock />
+                        )
+                        : (
+                          <TextWrapper className="ml-1">
+                            로그인
+                          </TextWrapper>
+                        )}
                     </div>
                   </a>
                 </Link>
               </div>
             )}
-        </div>
-        <div className="flex flex-col mt-4">
-          <MainTextWrapper className="mx-3 my-2 text-gray-500">Settings</MainTextWrapper>
-          <div className="py-2 w-full hover:bg-blue-100">
-            <Link href="/">
-              <a>
-                <div className="flex items-center mx-3 text-gray-400">
-                  <FiSettings />
-                  <TextWrapper className="ml-1">Settings</TextWrapper>
-                </div>
-              </a>
-            </Link>
-          </div>
         </div>
       </div>
     </div>

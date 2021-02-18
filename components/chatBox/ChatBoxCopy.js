@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Card, Button } from 'react-bootstrap';
 import { BsThreeDots } from 'react-icons/bs';
 import { IoEarthSharp } from 'react-icons/io5';
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import { Price, Title, TextWrapper } from './style';
 
 const ChatBox = ({ post }) => {
@@ -49,7 +48,7 @@ const ChatBox = ({ post }) => {
         </Card.Text>
         <Button
           className="text-sm"
-          variant="primary"
+          variant="outline-info"
         >
           구매 신청하기
         </Button>
