@@ -5,12 +5,16 @@ import AppLayout from '../components/AppLayout';
 import ChatBoxCopy from '../components/chatBox/ChatBoxCopy';
 import { LOAD_POSTS_REQUEST, CLEAR_PAGE_DATA } from '../reducers/post';
 import FilterBar from '../components/filterBar/FilterBar';
+import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
 
 const Home = () => {
   const dispatch = useDispatch();
   const { mainPosts, loadPostsLoading, pageData } = useSelector((state) => state.post);
 
   useEffect(() => {
+    dispatch({
+      type: LOAD_MY_INFO_REQUEST,
+    });
     dispatch({
       type: CLEAR_PAGE_DATA,
     });
