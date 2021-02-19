@@ -1,15 +1,38 @@
-import React from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, Button } from 'react-bootstrap';
 import { BsThreeDots } from 'react-icons/bs';
 import { IoEarthSharp } from 'react-icons/io5';
 import { Price, Title, TextWrapper } from './style';
+import { IN_POST_REQUEST } from '../../reducers/post';
 
 const ChatBox = ({ post }) => {
   const calcDateDiff = (a, b) => {
     const oneDay = 1000 * 60 * 60 * 24;
     return Math.round((Date.parse(b) - Date.parse(a)) / oneDay);
   };
+
+  const dispatch = useDispatch();
+  const [inPost, setInPost] = useState(false);
+  const { inPostDone, inPostError } = useSelector((state) => state.post);
+
+  const onClickChat = useCallback((e) => {
+    e.preventDefault();
+    dispatch({
+      type: IN_POST_REQUEST,
+      data: post.id,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (inPostDone) {
+      setInPost(true);
+    }
+    if (inPostError) {
+      alert(inPostError);
+    }
+  }, [inPostDone, inPostError]);
 
   const calcDate = (from, to, now) => {
     const isStart = Date.parse(from) < Date.parse(now);
@@ -46,12 +69,33 @@ const ChatBox = ({ post }) => {
             <TextWrapper> 원</TextWrapper>
           </div>
         </Card.Text>
-        <Button
-          className="text-sm"
-          variant="outline-info"
-        >
-          구매 신청하기
-        </Button>
+        {
+          inPost
+            ? (
+              <>
+                <Button
+                  className="text-sm"
+                  variant="outline-secondary"
+                  disabled
+                >구매 신청하기
+                </Button>
+                <Button
+                  className="text-sm ml-3"
+                  variant="outline-danger"
+                >신청 취소
+                </Button>
+              </>
+            )
+            : (
+              <Button
+                className="text-sm"
+                variant="outline-info"
+                onClick={onClickChat}
+              >구매 신청하기
+              </Button>
+            )
+        }
+
       </Card.Body>
       <Card.Footer className="flex">
         <div>
@@ -69,7 +113,23 @@ const ChatBox = ({ post }) => {
 };
 
 ChatBox.propTypes = {
-  post: PropTypes.object.isRequired,
+  //post: PropTypes.object.isRequired,
+  post: PropTypes.shape({
+    id: PropTypes.number,
+    User: PropTypes.object,
+    title: PropTypes.string,
+    personnel: PropTypes.number,
+    curPersonnel: PropTypes.number,
+    from: PropTypes.object,
+    to: PropTypes.object,
+    location: PropTypes.string,
+    price: PropTypes.number,
+    link: PropTypes.string,
+    img: PropTypes.string,
+    textArea: PropTypes.string,
+    createdAt: PropTypes.string,
+    Participants: PropTypes.arrayOf(PropTypes.object),
+  }).isRequired,
 };
 
 export default ChatBox;
