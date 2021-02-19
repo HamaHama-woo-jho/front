@@ -35,7 +35,13 @@ const ChatBox = ({ post }) => {
           <div className="text-xs text-gray-400">
             <span>{post.location}</span>
             <TextWrapper> ⋅ </TextWrapper>
-            <TextWrapper> {post.curPersonnel} / {post.personnel}</TextWrapper>
+            {post.isDivide
+              ? (
+                <TextWrapper>{post.curPersonnel} / {post.personnel}</TextWrapper>
+              )
+              : (
+                <TextWrapper>{post.curPersonnel}</TextWrapper>
+              )}
           </div>
           <TextWrapper className="mt-1">
             {post.textArea}

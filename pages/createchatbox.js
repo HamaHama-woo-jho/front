@@ -25,6 +25,7 @@ const initialData = {
   link: '',
   textArea: '',
   tag: '',
+  isDivide: true,
 };
 
 const createchatbox = () => {
@@ -43,10 +44,10 @@ const createchatbox = () => {
   const plusPageCount = useCallback((e) => {
     e.preventDefault();
     if (page === 0) {
-      setData({ ...data, title, link, price, personnel });
+      setData({ ...data, title, link, price, personnel, isDivide });
     }
     setPage(page + 1);
-  }, [page, title, link, price, personnel]);
+  }, [page, title, link, price, personnel, isDivide]);
 
   const minusPageCount = useCallback((e) => {
     e.preventDefault();
@@ -162,7 +163,7 @@ const createchatbox = () => {
 
   return (
     <AppLayout className="h-full">
-      <div className="bg-white w-96 rounded-xl shadow-md mx-auto mt-8 py-2 px-4 mb-5">
+      <div className="bg-white w-96 rounded-xl shadow-md mx-auto py-2 px-4 mb-5">
         <Form>
           <div className="w-full text-center text-2xl mt-8 mb-4">
             <span

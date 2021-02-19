@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { InputGroup, Form } from 'react-bootstrap';
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiMinus } from 'react-icons/fi';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { TextWrapper, MainTextWrapper } from './style';
 import useFilter from '../../hooks/useFilter';
@@ -112,11 +112,16 @@ const FilterBar = () => {
           </MainTextWrapper>
         </div>
         <div>
-          <div className="flex item-center py-3 justify-between">
+          <div
+            className="flex item-center py-3 justify-between cursor-pointer"
+            onClick={keywordFilterToggle}
+          >
             <TextWrapper>
               키워드
             </TextWrapper>
-            <FiPlus className="cursor-pointer mt-1" onClick={keywordFilterToggle} />
+            {keywordFilter
+              ? <FiMinus className="mt-1" />
+              : <FiPlus className="mt-1" />}
           </div>
           {keywordFilter
             ? (
@@ -143,11 +148,16 @@ const FilterBar = () => {
             )}
         </div>
         <div>
-          <div className="flex item-center py-3 justify-between">
+          <div
+            className="flex item-center py-3 justify-between cursor-pointer"
+            onClick={locationFilterToggle}
+          >
             <TextWrapper>
               위치
             </TextWrapper>
-            <FiPlus className="cursor-pointer mt-1" onClick={locationFilterToggle} />
+            {locationFilter
+              ? <FiMinus className="mt-1" />
+              : <FiPlus className="mt-1" />}
           </div>
           {locationFilter
             ? (
@@ -164,28 +174,32 @@ const FilterBar = () => {
             )}
         </div>
         <div>
-          <div className="flex item-center py-3 justify-between">
+          <div
+            className="flex item-center py-3 justify-between cursor-pointer"
+            onClick={priceFilterToggle}
+          >
             <TextWrapper>
               금액
             </TextWrapper>
-            <FiPlus className="cursor-pointer mt-1" onClick={priceFilterToggle} />
+            {priceFilter
+              ? <FiMinus className="mt-1" />
+              : <FiPlus className="mt-1" />}
           </div>
           {priceFilter
-            ? (
-              <>
-                <RangeSlider />
-              </>
-            )
-            : (
-              <></>
-            )}
+            ? (<RangeSlider />)
+            : (<></>)}
         </div>
         <div>
-          <div className="flex item-center py-3 justify-between">
+          <div
+            className="flex item-center py-3 justify-between cursor-pointer"
+            onClick={dateFilterToggle}
+          >
             <TextWrapper>
               날짜
             </TextWrapper>
-            <FiPlus className="cursor-pointer mt-1" onClick={dateFilterToggle} />
+            {dateFilter
+              ? <FiMinus className="mt-1" />
+              : <FiPlus className="mt-1" />}
           </div>
           {dateFilter
             ? (

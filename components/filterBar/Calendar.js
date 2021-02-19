@@ -31,7 +31,6 @@ const Calender = () => {
         selectedDays={[from, { from, to }]}
         modifiers={{ start: from, end: to }}
         onDayClick={handleDayClick}
-        disabledDays={{ before: new Date() }}
       />
       <Helmet>
         <style>
