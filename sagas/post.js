@@ -37,7 +37,6 @@ function* InPost(action) {
 function* loadPosts(action) {
   try {
     const result = yield call(loadPostsAPI, action.data);
-    console.log('아아아앙아아아아', result);
     yield put({
       type: LOAD_POSTS_SUCCESS,
       data: result.data,

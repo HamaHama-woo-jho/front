@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, Button } from 'react-bootstrap';
-import { BsThreeDots } from 'react-icons/bs';
+import { BsThreeDots, BsCalendar } from 'react-icons/bs';
 import { IoEarthSharp } from 'react-icons/io5';
 import { Price, Title, TextWrapper } from './style';
 import { IN_POST_REQUEST } from '../../reducers/post';
@@ -58,11 +58,17 @@ const ChatBox = ({ post }) => {
           <div className="text-xs text-gray-400">
             <span>{post.location}</span>
             <TextWrapper> ⋅ </TextWrapper>
-            <TextWrapper> {post.curPersonnel} / {post.personnel}</TextWrapper>
+            {post.isDivide
+              ? (
+                <TextWrapper>{post.curPersonnel} / {post.personnel}</TextWrapper>
+              )
+              : (
+                <TextWrapper>{post.curPersonnel}</TextWrapper>
+              )}
           </div>
-          <div className="mt-1">
+          <TextWrapper className="mt-1">
             {post.textArea}
-          </div>
+          </TextWrapper>
           <div className="my-1">
             <TextWrapper>인당 </TextWrapper>
             <Price>{num2currency(Math.round(post.price / post.personnel))}</Price>
@@ -97,12 +103,12 @@ const ChatBox = ({ post }) => {
         }
 
       </Card.Body>
-      <Card.Footer className="flex">
-        <div>
-          <div className="bg-green-400 w-1" />
+      <Card.Footer className="flex justify-between">
+        <div className="flex">
           <a href={post.link}>
             <IoEarthSharp />
           </a>
+          <BsCalendar className="cursor-pointer ml-2" />
         </div>
         <div>
           <BsThreeDots />

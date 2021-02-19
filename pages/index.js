@@ -6,10 +6,12 @@ import ChatBoxCopy from '../components/chatBox/ChatBoxCopy';
 import { LOAD_POSTS_REQUEST, CLEAR_PAGE_DATA } from '../reducers/post';
 import FilterBar from '../components/filterBar/FilterBar';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
+import filterPosts from '../api/filterPosts';
 
 const Home = () => {
   const dispatch = useDispatch();
   const { mainPosts, loadPostsLoading, pageData } = useSelector((state) => state.post);
+  const filter = useSelector((state) => state.filter);
 
   useEffect(() => {
     dispatch({
@@ -46,7 +48,7 @@ const Home = () => {
       <div className="flex">
         <div className="w-4/5">
           <StackGrid columnWidth={280} gutterWidth={3} gutterHeight={25} className="mt-15 mb-5">
-            {mainPosts.map((post) => (
+            {filterPosts(mainPosts, filter).map((post) => (
               <div>
                 <ChatBoxCopy post={post} />
               </div>

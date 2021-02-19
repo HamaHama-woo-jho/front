@@ -56,7 +56,7 @@ const reducer = (
         loadPostsDone: false,
         loadPostsError: null,
       };
-    case LOAD_POSTS_SUCCESS:
+    case LOAD_POSTS_SUCCESS: {
       return {
         ...state,
         pageData: action.data.lastId,
@@ -64,6 +64,7 @@ const reducer = (
         loadPostsDone: true,
         mainPosts: [...state.mainPosts, ...action.data.posts],
       };
+    }
     case LOAD_POSTS_FAILURE:
       return {
         ...state,

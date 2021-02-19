@@ -25,6 +25,7 @@ const initialData = {
   link: '',
   textArea: '',
   tag: '',
+  isDivide: true,
 };
 
 const createchatbox = () => {
@@ -38,14 +39,15 @@ const createchatbox = () => {
   const [personnel, onChangePersonnel] = useInput(data.personnel);
   const [textArea, onChangeTextArea] = useInput(data.textArea);
   const [location, onChangeLocaton] = useInput(data.location);
+  const [isDivide, setIsDivide] = useState(true);
 
   const plusPageCount = useCallback((e) => {
     e.preventDefault();
     if (page === 0) {
-      setData({ ...data, title, link, price, personnel });
+      setData({ ...data, title, link, price, personnel, isDivide });
     }
     setPage(page + 1);
-  }, [page, title, link, price, personnel]);
+  }, [page, title, link, price, personnel, isDivide]);
 
   const minusPageCount = useCallback((e) => {
     e.preventDefault();
@@ -107,14 +109,20 @@ const createchatbox = () => {
                 />
               </Form.Group>
             </div>
-            <Form.Group controlId="personnel">
-              <Form.Label>개인 비용</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="1인당 가격"
-                className="rounded-full"
+            <Form className="my-3 flex justify-center">
+              <Form.Check
+                checked={isDivide}
+                onChange={() => setIsDivide(!isDivide)}
+                className="mx-2"
+                label="분할 구매"
               />
-            </Form.Group>
+              <Form.Check
+                checked={!isDivide}
+                onChange={() => setIsDivide(!isDivide)}
+                className="mx-2"
+                label="개인 구매"
+              />
+            </Form>
           </>
         );
       case 1:
@@ -155,7 +163,7 @@ const createchatbox = () => {
 
   return (
     <AppLayout className="h-full">
-      <div className="bg-white w-96 rounded-xl shadow-md mx-auto mt-8 py-2 px-4 mb-5">
+      <div className="bg-white w-96 rounded-xl shadow-md mx-auto py-2 px-4 mb-5">
         <Form>
           <div className="w-full text-center text-2xl mt-8 mb-4">
             <span

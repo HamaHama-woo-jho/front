@@ -31,22 +31,12 @@
     "object-curly-newline": "off",
     "linebreak-style": "off",
     "react/jsx-props-no-spreading": "off",
-    "jsx-a11y/no-static-element-interactions": [
-      "error",
-      {
-        "handlers": [
-          "onClick",
-          "onMouseDown",
-          "onMouseUp",
-          "onKeyPress",
-          "onKeyDown",
-          "onKeyUp",
-        ],
-      },
-    ],
+    "jsx-a11y/no-static-element-interactions": "off",
     "consistent-return": "off",
     "no-else-return": "off",
     "react/no-unescaped-entities": "off",
     "max-len": "off",
+    "arrow-body-style": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
   }
 }
