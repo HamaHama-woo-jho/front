@@ -120,6 +120,7 @@ const reducer = (
     case CLEAR_PAGE_DATA:
       return {
         ...state,
+        mainPosts: [],
         pageData: null,
       };
     default:

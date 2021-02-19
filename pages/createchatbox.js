@@ -10,11 +10,6 @@ import { addChatRequestAction } from '../reducers/post';
 
 const initialData = {
   id: 1,
-  User: {
-    id: 'jaegoo',
-    nickname: '재구몬',
-    password: 'worn981012',
-  },
   title: '',
   personnel: 0,
   curPersonnel: 1,

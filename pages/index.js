@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import StackGrid from 'react-stack-grid';
 import { useSelector, useDispatch } from 'react-redux';
 import AppLayout from '../components/AppLayout';
-import ChatBoxCopy from '../components/chatBox/ChatBoxCopy';
+import ChatBox from '../components/chatBox/ChatBox';
 import { LOAD_POSTS_REQUEST, CLEAR_PAGE_DATA } from '../reducers/post';
 import FilterBar from '../components/filterBar/FilterBar';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
@@ -50,7 +50,7 @@ const Home = () => {
           <StackGrid columnWidth={280} gutterWidth={3} gutterHeight={25} className="mt-15 mb-5">
             {filterPosts(mainPosts, filter).map((post) => (
               <div>
-                <ChatBoxCopy post={post} />
+                <ChatBox post={post} />
               </div>
             ))}
           </StackGrid>
