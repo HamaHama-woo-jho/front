@@ -3,7 +3,7 @@ const filterPosts = (posts, filter) => {
     .filter((post) => post.title.includes(filter.keyword) || post.textArea.includes(filter.keyword))
     .filter((post) => filter.location.includes(post.location))
     .filter((post) => {
-      const price = post.price / post.personnel;
+      const price = post.isDivide ? post.price / post.personnel : post.price;
       return filter.priceLow < price && price < filter.priceHigh;
     })
     .filter((post) => {
