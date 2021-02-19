@@ -6,7 +6,7 @@ const useFilter = (initialValue = false) => {
     e.preventDefault();
     setValue(!value);
   }, [value]);
-  return [value, onToggle];
+  return [value, setValue, onToggle];
 };
 
 export default useFilter;

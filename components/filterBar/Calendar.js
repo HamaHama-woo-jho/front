@@ -1,30 +1,24 @@
 import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import DayPicker, { DateUtils } from 'react-day-picker';
 import Helmet from 'react-helmet';
 import 'react-day-picker/lib/style.css';
-// import { RedoOutlined } from '@ant-design/icons';
+import { FILTER_DATE } from '../../reducers/filter';
 
-const Calender = ({ data, setData }) => {
-  const [from, setFrom] = useState(data.from);
-  const [to, setTo] = useState(data.to);
-
-  // const handleResetClick = useCallback(
-  //   (e) => {
-  //     e.preventDefault();
-  //     setFrom(undefined);
-  //     setTo(undefined);
-  //     setData({ ...data, from: undefined, to: undefined });
-  //   },
-  //   [from, to],
-  // );
+const Calender = () => {
+  const dispatch = useDispatch();
+  const [from, setFrom] = useState(null);
+  const [to, setTo] = useState(null);
 
   const handleDayClick = useCallback(
     (day) => {
       const range = DateUtils.addDayToRange(day, { from, to });
       setFrom(range.from);
       setTo(range.to);
-      setData({ ...data, from: range.from, to: range.to });
+      dispatch({
+        type: FILTER_DATE,
+        data: range,
+      });
     },
     [from, to],
   );
@@ -62,11 +56,6 @@ const Calender = ({ data, setData }) => {
       </Helmet>
     </div>
   );
-};
-
-Calender.propTypes = {
-  data: PropTypes.object.isRequired,
-  setData: PropTypes.func.isRequired,
 };
 
 export default Calender;

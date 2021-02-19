@@ -38,6 +38,7 @@ const createchatbox = () => {
   const [personnel, onChangePersonnel] = useInput(data.personnel);
   const [textArea, onChangeTextArea] = useInput(data.textArea);
   const [location, onChangeLocaton] = useInput(data.location);
+  const [isDivide, setIsDivide] = useState(true);
 
   const plusPageCount = useCallback((e) => {
     e.preventDefault();
@@ -107,14 +108,20 @@ const createchatbox = () => {
                 />
               </Form.Group>
             </div>
-            <Form.Group controlId="personnel">
-              <Form.Label>개인 비용</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="1인당 가격"
-                className="rounded-full"
+            <Form className="my-3 flex justify-center">
+              <Form.Check
+                checked={isDivide}
+                onChange={() => setIsDivide(!isDivide)}
+                className="mx-2"
+                label="분할 구매"
               />
-            </Form.Group>
+              <Form.Check
+                checked={!isDivide}
+                onChange={() => setIsDivide(!isDivide)}
+                className="mx-2"
+                label="개인 구매"
+              />
+            </Form>
           </>
         );
       case 1:
