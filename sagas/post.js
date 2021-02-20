@@ -4,7 +4,12 @@ import {
   LOAD_POSTS_FAILURE, LOAD_POSTS_REQUEST, LOAD_POSTS_SUCCESS,
   ADD_POST_SUCCESS, ADD_POST_FAILURE, ADD_POST_REQUEST,
   IN_POST_SUCCESS, IN_POST_FAILURE, IN_POST_REQUEST,
+  OUT_POST_SUCCESS, OUT_POST_FAILURE, OUT_POST_REQUEST,
 } from '../reducers/post';
+
+function outPostAPI(data) {
+  return axios.delete(`/post/${data}/out`);
+}
 
 function inPostAPI(data) {
   return axios.patch(`/post/${data}/in`);
@@ -18,7 +23,23 @@ function addPostAPI(data) {
   return axios.post('/post/add', data);
 }
 
-function* InPost(action) {
+function* outPost(action) {
+  try {
+    const result = yield call(outPostAPI, action.data);
+    yield put({
+      type: OUT_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: OUT_POST_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+
+function* inPost(action) {
   try {
     const result = yield call(inPostAPI, action.data);
     yield put({
@@ -64,8 +85,12 @@ function* addPost(action) {
   }
 }
 
+function* watchOutPost() {
+  yield takeLatest(OUT_POST_REQUEST, outPost);
+}
+
 function* watchInPost() {
-  yield takeLatest(IN_POST_REQUEST, InPost);
+  yield takeLatest(IN_POST_REQUEST, inPost);
 }
 
 function* watchLoadPosts() {
@@ -78,6 +103,7 @@ function* watchAddPost() {
 
 export default function* postSaga() {
   yield all([
+    fork(watchOutPost),
     fork(watchInPost),
     fork(watchLoadPosts),
     fork(watchAddPost),

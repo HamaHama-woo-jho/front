@@ -5,7 +5,7 @@ import { Card, Button } from 'react-bootstrap';
 import { BsThreeDots, BsCalendar } from 'react-icons/bs';
 import { IoEarthSharp } from 'react-icons/io5';
 import { Price, Title, TextWrapper } from './style';
-import { IN_POST_REQUEST } from '../../reducers/post';
+import { IN_POST_REQUEST, OUT_POST_REQUEST } from '../../reducers/post';
 
 const ChatBox = ({ post }) => {
   const calcDateDiff = (a, b) => {
@@ -14,8 +14,10 @@ const ChatBox = ({ post }) => {
   };
 
   const dispatch = useDispatch();
-  const [inPost, setInPost] = useState(false);
-  const { inPostDone, inPostError } = useSelector((state) => state.post);
+  const { inPostDone, inPostError, outPostDone } = useSelector((state) => state.post);
+  const { me } = useSelector((state) => state.user);
+  const ifIn = me ? post.Participants.map(p => p.id).includes(me.id) : false;
+  const [inPost, setInPost] = useState(ifIn);
 
   const onClickChat = useCallback((e) => {
     e.preventDefault();
@@ -25,14 +27,25 @@ const ChatBox = ({ post }) => {
     });
   }, []);
 
+  const onOutChat = useCallback((e) => {
+    e.preventDefault();
+    dispatch({
+      type: OUT_POST_REQUEST,
+      data: post.id,
+    });
+  }, []);
+
   useEffect(() => {
     if (inPostDone) {
       setInPost(true);
     }
+    if (outPostDone) {
+      setInPost(false);
+    }
     if (inPostError) {
       alert(inPostError);
     }
-  }, [inPostDone, inPostError]);
+  }, [inPostDone, inPostError, outPostDone]);
 
   const calcDate = (from, to, now) => {
     const isStart = Date.parse(from) < Date.parse(now);
@@ -76,7 +89,7 @@ const ChatBox = ({ post }) => {
           </div>
         </Card.Text>
         {
-          inPost
+          ifIn
             ? (
               <>
                 <Button
@@ -88,6 +101,7 @@ const ChatBox = ({ post }) => {
                 <Button
                   className="text-sm ml-3"
                   variant="outline-danger"
+                  onClick={onOutChat}
                 >신청 취소
                 </Button>
               </>
