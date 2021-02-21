@@ -8,16 +8,13 @@ import { Price, Title, TextWrapper } from './style';
 import { IN_POST_REQUEST, OUT_POST_REQUEST } from '../../reducers/post';
 
 const ChatBox = ({ post }) => {
-  const calcDateDiff = (a, b) => {
-    const oneDay = 1000 * 60 * 60 * 24;
-    return Math.round((Date.parse(b) - Date.parse(a)) / oneDay);
-  };
-
   const dispatch = useDispatch();
   const { inPostDone, inPostError, outPostDone } = useSelector((state) => state.post);
   const { me } = useSelector((state) => state.user);
-  const ifIn = me ? post.Participants.map(p => p.id).includes(me.id) : false;
+  const ifIn = me ? post.Participants.map((p) => p.id).includes(me.id) : false;
   const [inPost, setInPost] = useState(ifIn);
+  const isFinish = post.Participants.length === post.personnel;
+  const isOwner = me ? post.UserId === me.id : false;
 
   const onClickChat = useCallback((e) => {
     e.preventDefault();
@@ -47,18 +44,81 @@ const ChatBox = ({ post }) => {
     }
   }, [inPostDone, inPostError, outPostDone]);
 
-  const calcDate = (from, to, now) => {
-    const isStart = Date.parse(from) < Date.parse(now);
-    return isStart
-      ? `D-${calcDateDiff(now, to)}`
-      : `${calcDateDiff(now, from)}일 후`;
-  };
-
-  const calcProgressBar = (from, to, now) => {
-    const isStart = Date.parse(from) < Date.parse(now);
-    const dateDiff = isStart ? calcDateDiff(now, to) : 0;
-    return dateDiff > 7 || dateDiff === 0 ? 0 : ((7 - dateDiff) * 100) / 7;
-  };
+  const joinButton = (join, finish) => {
+    if (join && !finish) {
+      return (
+        <>
+          {isOwner
+            ? (
+              <Button
+                className="text-sm"
+                variant="outline-secondary"
+                disabled
+              >
+                수정하기
+              </Button>
+            )
+            : (
+              <>
+                <Button
+                  className="text-sm"
+                  variant="outline-secondary"
+                  disabled
+                >
+                  구매 신청하기
+                </Button>
+                <Button
+                  className="text-sm ml-3"
+                  variant="outline-danger"
+                  onClick={onOutChat}
+                >
+                  신청 취소
+                </Button>
+              </>
+            )}
+        </>
+      );
+    } else if (join && finish) {
+      return (
+        <>
+          <Button
+            className="text-sm"
+            variant="outline-danger"
+            disabled
+          >
+            마감
+          </Button>
+          <Button
+            className="text-sm ml-3"
+            variant="success"
+          // onClick={onOutChat}
+          >
+            입장하기
+          </Button>
+        </>
+      );
+    } else if (!join && !finish) {
+      return (
+        <Button
+          className="text-sm"
+          variant="outline-info"
+          onClick={onClickChat}
+        >
+          구매 신청하기
+        </Button>
+      );
+    } else {
+      return (
+        <Button
+          className="text-sm"
+          variant="outline-danger"
+          disabled
+        >
+          마감
+        </Button>
+      );
+    }
+  }
 
   const num2currency = (num) => num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').split('.')[0];
 
@@ -71,7 +131,7 @@ const ChatBox = ({ post }) => {
           <div className="text-xs text-gray-400">
             <span>{post.location}</span>
             <TextWrapper> ⋅ </TextWrapper>
-            <TextWrapper>{post.curPersonnel} / {post.personnel}</TextWrapper>
+            <TextWrapper>{post.Participants.length} / {post.personnel}</TextWrapper>
           </div>
           <TextWrapper className="mt-1">
             {post.textArea}
@@ -88,34 +148,7 @@ const ChatBox = ({ post }) => {
             <TextWrapper> 원</TextWrapper>
           </div>
         </Card.Text>
-        {
-          ifIn
-            ? (
-              <>
-                <Button
-                  className="text-sm"
-                  variant="outline-secondary"
-                  disabled
-                >구매 신청하기
-                </Button>
-                <Button
-                  className="text-sm ml-3"
-                  variant="outline-danger"
-                  onClick={onOutChat}
-                >신청 취소
-                </Button>
-              </>
-            )
-            : (
-              <Button
-                className="text-sm"
-                variant="outline-info"
-                onClick={onClickChat}
-              >구매 신청하기
-              </Button>
-            )
-        }
-
+        {joinButton(ifIn, isFinish)}
       </Card.Body>
       <Card.Footer className="flex justify-between">
         <div className="flex">
@@ -135,7 +168,7 @@ const ChatBox = ({ post }) => {
 ChatBox.propTypes = {
   post: PropTypes.shape({
     id: PropTypes.number,
-    User: PropTypes.object,
+    UserId: PropTypes.number,
     title: PropTypes.string,
     personnel: PropTypes.number,
     curPersonnel: PropTypes.number,

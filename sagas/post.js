@@ -73,9 +73,10 @@ function* loadPosts(action) {
 function* addPost(action) {
   try {
     const result = yield call(addPostAPI, action.data);
+    console.log('포스트가 등록되었습니다.', result);
     yield put({
       type: ADD_POST_SUCCESS,
-      data: { ...action.data, img: result.data },
+      data: result.data,
     });
   } catch (err) {
     yield put({

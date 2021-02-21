@@ -132,12 +132,10 @@ const reducer = (state = initialState, action) => {
         signupError: null,
       };
     case SIGNUP_SUCCESS:
-      Router.push('/');
       return {
         ...state,
         signupLoading: false,
         signupDone: true,
-        loginDone: true,
         me: action.data,
       };
     case SIGNUP_FAILURE:

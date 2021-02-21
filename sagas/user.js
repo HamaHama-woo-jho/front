@@ -75,11 +75,15 @@ function* logout() {
 
 function* signUp(action) {
   try {
-    const result = yield call(signUpAPI, action.data);
-    console.log(result);
+    yield call(signUpAPI, action.data);
+    yield call(logInAPI, { id: action.data.id, password: action.data.password });
     yield put({
       type: SIGNUP_SUCCESS,
       data: action.data,
+    });
+    yield put({
+      type: LOGIN_SUCCESS,
+      data: { id: action.data.id, password: action.data.password },
     });
   } catch (err) {
     yield put({
