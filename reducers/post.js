@@ -111,16 +111,16 @@ const reducer = (
     case IN_POST_FAILURE:
       return {
         ...state,
-        outPostLoading: true,
-        outPostDone: false,
-        outPostError: action.data,
+        inPostLoading: true,
+        inPostDone: false,
+        inPostError: action.data,
       };
     case OUT_POST_REQUEST:
       return {
         ...state,
-        inPostLoading: true,
-        inPostDone: false,
-        inPostError: null,
+        outPostLoading: true,
+        outPostDone: false,
+        outPostError: null,
       };
     case OUT_POST_SUCCESS:
       // eslint-disable-next-line no-case-declarations

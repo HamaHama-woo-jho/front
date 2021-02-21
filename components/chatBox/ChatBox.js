@@ -10,10 +10,9 @@ import Hashtag from '../chatBox/hashtag';
 
 const ChatBox = ({ post }) => {
   const dispatch = useDispatch();
-  const { inPostDone, inPostError, outPostDone } = useSelector((state) => state.post);
+  const { inPostError } = useSelector((state) => state.post);
   const { me } = useSelector((state) => state.user);
   const ifIn = me ? post.Participants.map((p) => p.id).includes(me.id) : false;
-  const [inPost, setInPost] = useState(ifIn);
   const isFinish = post.Participants.length === post.personnel;
   const isOwner = me ? post.UserId === me.id : false;
 
@@ -34,16 +33,11 @@ const ChatBox = ({ post }) => {
   }, []);
 
   useEffect(() => {
-    if (inPostDone) {
-      setInPost(true);
-    }
-    if (outPostDone) {
-      setInPost(false);
-    }
+    console.log('실행중');
     if (inPostError) {
       alert(inPostError);
     }
-  }, [inPostDone, inPostError, outPostDone]);
+  }, []);
 
   const joinButton = (join, finish) => {
     if (join && !finish) {
@@ -54,7 +48,6 @@ const ChatBox = ({ post }) => {
               <Button
                 className="text-sm"
                 variant="outline-secondary"
-                disabled
               >
                 수정하기
               </Button>
@@ -153,7 +146,7 @@ const ChatBox = ({ post }) => {
       </Card.Body>
       <Card.Footer className="flex justify-between">
         <div className="flex">
-          <a href={post.link}>
+          <a href={post.link} target="_blank" rel="noopener noreferrer">
             <IoEarthSharp />
           </a>
           <BsCalendar className="cursor-pointer ml-2" />
@@ -182,6 +175,7 @@ ChatBox.propTypes = {
     textArea: PropTypes.string,
     createdAt: PropTypes.string,
     Participants: PropTypes.arrayOf(PropTypes.object),
+    Hashtags: PropTypes.arrayOf(PropTypes.object),
     isDivide: PropTypes.bool,
   }).isRequired,
 };
