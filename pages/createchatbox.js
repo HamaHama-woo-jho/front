@@ -16,7 +16,7 @@ const initialData = {
   from: undefined,
   to: undefined,
   price: 0,
-  location: '',
+  location: '북측',
   link: '',
   textArea: '',
   tag: '',
@@ -158,7 +158,7 @@ const createchatbox = () => {
 
   return (
     <AppLayout className="h-full">
-      <div className="bg-white w-96 rounded-xl shadow-md mx-auto py-2 px-4 mb-5">
+      <div className="bg-white w-96 rounded-xl shadow-md mx-auto py-2 px-4 mt-12 mb-5">
         <Form>
           <div className="w-full text-center text-2xl mt-8 mb-4">
             <span

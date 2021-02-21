@@ -6,7 +6,7 @@ const AppLayout = ({ children }) => (
   <>
     <div style={{ height: '100vh' }}>
       <Menu />
-      <div className="pt-36 h-full flex flex-col" style={{ justifyContent: 'space-between' }}>
+      <div className="pt-24 h-full flex flex-col" style={{ justifyContent: 'space-between' }}>
         {children}
         <div
           className="w-full text-center text-white py-1"

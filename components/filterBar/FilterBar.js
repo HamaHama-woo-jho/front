@@ -201,13 +201,15 @@ const FilterBar = () => {
               ? <FiMinus className="mt-1" />
               : <FiPlus className="mt-1" />}
           </div>
-          {dateFilter
-            ? (
-              <Calender data={date} setData={setDate} />
-            )
-            : (
-              <></>
-            )}
+          <div className="mb-4">
+            {dateFilter
+              ? (
+                <Calender data={date} setData={setDate} />
+              )
+              : (
+                <></>
+              )}
+          </div>
         </div>
       </div>
     </div>

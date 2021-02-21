@@ -4,7 +4,7 @@ const filterPosts = (posts, filter) => {
     .filter((post) => filter.location.includes(post.location))
     .filter((post) => {
       const price = post.isDivide ? post.price / post.personnel : post.price;
-      return filter.priceLow < price && price < filter.priceHigh;
+      return filter.priceLow <= price && price <= filter.priceHigh;
     })
     .filter((post) => {
       const filterLow = filter.from;
