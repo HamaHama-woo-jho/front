@@ -6,6 +6,7 @@ import { BsThreeDots, BsCalendar } from 'react-icons/bs';
 import { IoEarthSharp } from 'react-icons/io5';
 import { Price, Title, TextWrapper } from './style';
 import { IN_POST_REQUEST, OUT_POST_REQUEST } from '../../reducers/post';
+import Hashtag from '../chatBox/hashtag';
 
 const ChatBox = ({ post }) => {
   const dispatch = useDispatch();
@@ -134,7 +135,7 @@ const ChatBox = ({ post }) => {
             <TextWrapper>{post.Participants.length} / {post.personnel}</TextWrapper>
           </div>
           <TextWrapper className="mt-1">
-            {post.textArea}
+            <Hashtag postData={post.textArea} />
           </TextWrapper>
           <div className="my-1">
             <TextWrapper>인당 </TextWrapper>

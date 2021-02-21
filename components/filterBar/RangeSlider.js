@@ -11,7 +11,7 @@ const num2currency = (num) => num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
 const RangeSlider = () => {
   const dispatch = useDispatch();
   const { mainPosts } = useSelector((state) => state.post);
-  const max = Math.max(...(mainPosts.map((post) => (post.isDived ? post.price / post.personnel : post.price))));
+  const max = Math.max(...(mainPosts.map((post) => (post.isDivide ? post.price / post.personnel : post.price))));
   const [value, setValue] = React.useState([0, max]);
 
   const handleChange = (e, newValue) => {
