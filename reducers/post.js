@@ -9,6 +9,9 @@ export const initialState = {
   inPostLoading: false,
   inPostDone: false,
   inPostError: null,
+  outPostLoading: false,
+  outPostDone: false,
+  outPostError: null,
   mainPosts: [],
 };
 
@@ -28,11 +31,6 @@ export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 export const CLEAR_PAGE_DATA = 'CLEAR_PAGE_DATA';
-
-export const outPostRequestAction = (data) => ({
-  type: OUT_POST_REQUEST,
-  data,
-});
 
 export const addChatRequestAction = (data) => ({
   type: ADD_POST_REQUEST,
@@ -102,9 +100,9 @@ const reducer = (
       };
     case IN_POST_SUCCESS:
       // eslint-disable-next-line no-case-declarations
-      //const post = state.mainPosts.find((v) => v.id === action.data.PostId);
-      //console.log(post);
-      //post.Participants.push({ id: action.data.UserId });
+      const postin = state.mainPosts.find((v) => v.id === action.data.PostId);
+      //console.log(post.Participants);
+      postin.Participants.push({ id: action.data.UserId });
       return {
         ...state,
         inPostLoading: false,
@@ -113,9 +111,32 @@ const reducer = (
     case IN_POST_FAILURE:
       return {
         ...state,
+        outPostLoading: true,
+        outPostDone: false,
+        outPostError: action.data,
+      };
+    case OUT_POST_REQUEST:
+      return {
+        ...state,
         inPostLoading: true,
         inPostDone: false,
-        inPostError: action.data,
+        inPostError: null,
+      };
+    case OUT_POST_SUCCESS:
+      // eslint-disable-next-line no-case-declarations
+      const postout = state.mainPosts.find((v) => v.id === action.data.PostId);
+      postout.Participants = postout.Participants.filter((v) => v.id !== action.data.UserId);
+      return {
+        ...state,
+        outPostLoading: false,
+        outPostDone: true,
+      };
+    case OUT_POST_FAILURE:
+      return {
+        ...state,
+        outPostLoading: true,
+        outPostDone: false,
+        outPostError: action.data,
       };
     case CLEAR_PAGE_DATA:
       return {
