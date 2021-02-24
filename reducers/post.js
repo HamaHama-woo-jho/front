@@ -12,6 +12,9 @@ export const initialState = {
   outPostLoading: false,
   outPostDone: false,
   outPostError: null,
+  removePostLoading: false,
+  removePostDone: false,
+  removePostError: null,
   mainPosts: [],
 };
 
@@ -30,6 +33,11 @@ export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+
+export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
+export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
+export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
+
 export const CLEAR_PAGE_DATA = 'CLEAR_PAGE_DATA';
 
 export const addChatRequestAction = (data) => ({
@@ -75,7 +83,7 @@ const reducer = (
         ...state,
         addPostLoading: true,
         addPostDone: false,
-        addPostrror: null,
+        addPostError: null,
       };
     case ADD_POST_SUCCESS:
       return {
@@ -101,7 +109,6 @@ const reducer = (
     case IN_POST_SUCCESS:
       // eslint-disable-next-line no-case-declarations
       const postin = state.mainPosts.find((v) => v.id === action.data.PostId);
-      //console.log(post.Participants);
       postin.Participants.push({ id: action.data.UserId });
       return {
         ...state,
@@ -137,6 +144,30 @@ const reducer = (
         outPostLoading: true,
         outPostDone: false,
         outPostError: action.data,
+      };
+    case REMOVE_POST_REQUEST:
+      return {
+        ...state,
+        removePostLoading: true,
+        removePostDone: false,
+        removePostError: null,
+      };
+    case REMOVE_POST_SUCCESS:
+      // eslint-disable-next-line no-case-declarations
+      const newPost = state.mainPosts.filter((v) => v.id !== action.data.postId);
+      console.log('액션데이터: ', action.data);
+      return {
+        ...state,
+        removePostLoading: false,
+        removePostDone: true,
+        mainPosts: newPost,
+      };
+    case REMOVE_POST_FAILURE:
+      return {
+        ...state,
+        removePostLoading: true,
+        removePostDone: false,
+        removePostError: action.error,
       };
     case CLEAR_PAGE_DATA:
       return {

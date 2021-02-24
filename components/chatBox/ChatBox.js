@@ -1,20 +1,20 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, Button, ButtonGroup, Overlay, Tooltip } from 'react-bootstrap';
+import { Card, Button, Modal } from 'react-bootstrap';
 import { BsCalendar } from 'react-icons/bs';
 import { RiAlarmWarningLine } from 'react-icons/ri';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { IoEarthSharp } from 'react-icons/io5';
 import { Price, Title, TextWrapper } from './style';
-import { IN_POST_REQUEST, OUT_POST_REQUEST } from '../../reducers/post';
+import { IN_POST_REQUEST, OUT_POST_REQUEST, REMOVE_POST_REQUEST } from '../../reducers/post';
 import Hashtag from './hashtag';
 
 const ChatBox = ({ post }) => {
   const target = useRef(null);
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
-  const { inPostError } = useSelector((state) => state.post);
+  const { removeDone } = useSelector((state) => state.post);
   const { me } = useSelector((state) => state.user);
   const ifIn = me ? post.Participants.map((p) => p.id).includes(me.id) : false;
   const isFinish = post.Participants.length === post.personnel;
@@ -36,18 +36,23 @@ const ChatBox = ({ post }) => {
     });
   }, []);
 
+  const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false);
+
   const onDelete = useCallback((e) => {
     e.preventDefault();
-    console.log('클릭');
-    setShow(!show);
-  }, [show]);
-
-  useEffect(() => {
-    console.log('실행중');
-    if (inPostError) {
-      alert(inPostError);
-    }
+    setShow(false);
+    dispatch({
+      type: REMOVE_POST_REQUEST,
+      data: post.id,
+    })
   }, []);
+
+  // useEffect(() => {
+  //   if (removeDone) {
+  //     setShow(false);
+  //   }
+  // }, [removeDone]);
 
   const joinButton = (join, finish) => {
     if (join && !finish) {
@@ -165,19 +170,21 @@ const ChatBox = ({ post }) => {
           {me && (me.id === post.UserId
             ? (
               <>
-                <AiOutlineDelete ref={target} onClick={onDelete} className="cursor-pointer" />
-                <Overlay target={target.current} show={show} placement="top">
-                  <Tooltip>
-                    <ButtonGroup>
-                      <Button>
-                        삭제
-                      </Button>
-                      <Button>
-                        삭제
-                      </Button>
-                    </ButtonGroup>
-                  </Tooltip>
-                </Overlay>
+                <AiOutlineDelete ref={target} onClick={handleShow} className="cursor-pointer" />
+                <Modal
+                  show={show}
+                  onHide={handleClose}
+                  centered
+                >
+                  <Modal.Header closeButton className="bg-gray-100">게시물 삭제</Modal.Header>
+                  <Modal.Body>현재 공구 게시물을 삭제하시겠습니까?
+                    <br /> 삭제한 뒤에는 복구가 불가합니다.
+                  </Modal.Body>
+                  <Modal.Footer className="border-none pt-0">
+                    <Button variant="secondary" onClick={handleClose}>취소</Button>
+                    <Button variant="danger" onClick={onDelete}>삭제</Button>
+                  </Modal.Footer>
+                </Modal>
               </>
             )
             : (

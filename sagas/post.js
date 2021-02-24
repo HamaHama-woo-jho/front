@@ -5,6 +5,7 @@ import {
   ADD_POST_SUCCESS, ADD_POST_FAILURE, ADD_POST_REQUEST,
   IN_POST_SUCCESS, IN_POST_FAILURE, IN_POST_REQUEST,
   OUT_POST_SUCCESS, OUT_POST_FAILURE, OUT_POST_REQUEST,
+  REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE, REMOVE_POST_REQUEST,
 } from '../reducers/post';
 
 function outPostAPI(data) {
@@ -21,6 +22,10 @@ function loadPostsAPI(data) {
 
 function addPostAPI(data) {
   return axios.post('/post/add', data);
+}
+
+function removePostAPI(data) {
+  return axios.delete(`/post/${data}`);
 }
 
 function* outPost(action) {
@@ -86,6 +91,26 @@ function* addPost(action) {
   }
 }
 
+function* removePost(action) {
+  try {
+    const result = yield call(removePostAPI, action.data);
+    console.log('포스트가 삭제되었습니다.', result);
+    yield put({
+      type: REMOVE_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: REMOVE_POST_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+
+function* watchRemovePost() {
+  yield takeLatest(REMOVE_POST_REQUEST, removePost);
+}
+
 function* watchOutPost() {
   yield takeLatest(OUT_POST_REQUEST, outPost);
 }
@@ -104,6 +129,7 @@ function* watchAddPost() {
 
 export default function* postSaga() {
   yield all([
+    fork(watchRemovePost),
     fork(watchOutPost),
     fork(watchInPost),
     fork(watchLoadPosts),

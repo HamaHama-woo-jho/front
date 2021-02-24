@@ -235,7 +235,7 @@ const FilterBar = () => {
           </div>
           <div>
             {hashtags.map((tags) => (
-              <div className="inline-flex bg-blue-100 rounded px-2 py-1 mx-2 items-center">
+              <div className="inline-flex bg-blue-100 rounded px-2 py-1 mx-2 items-center mb-2">
                 <HashtagWrapper>
                   {tags.content}
                 </HashtagWrapper>
