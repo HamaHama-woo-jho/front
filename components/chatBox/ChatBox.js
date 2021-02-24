@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, Button, Modal, Form } from 'react-bootstrap';
+import { Card, Button, Modal, Form, OverlayTrigger, Popover, Spinner} from 'react-bootstrap';
 import { BsCalendar } from 'react-icons/bs';
 import { RiAlarmWarningLine } from 'react-icons/ri';
 import { AiOutlineDelete } from 'react-icons/ai';
@@ -12,6 +12,7 @@ import {
   OUT_POST_REQUEST,
   REMOVE_POST_REQUEST,
   REPORT_POST_REQUEST,
+  REPORT_INFO_REQUEST,
 } from '../../reducers/post';
 import Hashtag from './hashtag';
 import useInput from '../../hooks/useInput';
@@ -20,7 +21,7 @@ const ChatBox = ({ post }) => {
   const target = useRef(null);
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
-  const { removePostDone, reportPostDone } = useSelector((state) => state.post);
+  const { removePostDone, reportPostDone, reportInfoLoading } = useSelector((state) => state.post);
   const { me } = useSelector((state) => state.user);
   const ifIn = me ? post.Participants.map((p) => p.id).includes(me.id) : false;
   const isFinish = post.Participants.length === post.personnel;
@@ -60,7 +61,6 @@ const ChatBox = ({ post }) => {
   const onReport = useCallback(
     (e) => {
       e.preventDefault();
-      console.log(title);
       dispatch({
         type: REPORT_POST_REQUEST,
         data: { postId, title, reason },
@@ -68,6 +68,36 @@ const ChatBox = ({ post }) => {
     },
     [title, reason],
   );
+
+  const report = () => {
+    const contents = ['불쾌한 감정을 불러일으키는 게시물임', 'b', 'c', 'd', 'e', 'f'];
+    const titles = [0, 0, 0, 0, 0, 0];
+    for(const i of post.Reports) {
+      titles[i.title] = titles[i.title] + 1;
+    };
+    return titles.map((t) => <span>`${contents[t]}: ${t}회`</span>);
+  };
+
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Title as="h3">신고 현황</Popover.Title>
+      <Popover.Content>
+        {
+          reportInfoLoading
+            ? (<Spinner />)
+            : { report().map((i)=> i) }
+        }
+      </Popover.Content>
+    </Popover>
+  );
+
+  const Reportinfo = useCallback((e) => {
+    e.preventDefault();
+    dispatch({
+      type: REPORT_INFO_REQUEST,
+      data: post.id,
+    });
+  }, []);
 
   useEffect(() => {
     if (removePostDone) {
@@ -146,9 +176,13 @@ const ChatBox = ({ post }) => {
           <div className="flex">
             <Title>{post.title}</Title>
             {post.isReported ? (
-              <Report className="ml-auto push cursor-pointer hover:text-gray-600">
-                신고당한 게시물
-              </Report>
+              <>
+                <OverlayTrigger trigger="click" placement="top" overlay={popover}>
+                  <Report onClick={Reportinfo} className="ml-auto push cursor-pointer hover:text-gray-600">
+                    신고당한 게시물
+                  </Report>
+                </OverlayTrigger>
+              </>
             ) : (
               <></>
             )}
@@ -186,8 +220,7 @@ const ChatBox = ({ post }) => {
         </div>
         <div>
           {me
-            &&
-            (me.id === post.UserId ? (
+            && (me.id === post.UserId ? (
               <>
                 <AiOutlineDelete
                   ref={target}
@@ -227,21 +260,22 @@ const ChatBox = ({ post }) => {
                       <Form.Label>신고항목</Form.Label>
                       <Form.Control
                         as="select"
-                        placeholder="신고항목을 선택해주세요"
                         required
                         onChange={onChangeTitle}
                       >
+                        <option hidden value>신고항목을 선택해 주세요.</option>
                         <option value="1">
                           불쾌한 감정을 불러일으키는 게시물임
                         </option>
                         <option value="2">스팸성 게시물임</option>
                         <option value="3">성적으로 부적절한 게시물임</option>
                         <option value="4">
-                          사기 또는 오해의 소지가 있음임
+                          사기 또는 오해의 소지가 있음
                         </option>
                         <option value="5">
                           약물 또는 범죄와 관련된 불법성 게시물임
                         </option>
+                        <option value="6">기타</option>
                       </Form.Control>
                     </Form.Group>
                     <Form.Group className="my-4">
@@ -290,6 +324,7 @@ ChatBox.propTypes = {
     Hashtags: PropTypes.arrayOf(PropTypes.object),
     isDivide: PropTypes.bool,
     isReported: PropTypes.bool,
+    Reports: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
 };
 

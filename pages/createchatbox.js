@@ -131,8 +131,8 @@ const createchatbox = () => {
               <Form.Control
                 as="select"
                 onChange={onChangeLocaton}
-                defaultValue={data.location}
               >
+                <option hidden value>지역을 선택해 주세요.</option>
                 <option>북측</option>
                 <option>서측</option>
                 <option>동측</option>

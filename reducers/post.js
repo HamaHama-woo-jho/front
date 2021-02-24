@@ -18,6 +18,9 @@ export const initialState = {
   reportPostLoading: false,
   reportPostDone: false,
   reportPostError: null,
+  reportInfoLoading: false,
+  reportInfoDone: false,
+  reportInfoError: null,
   mainPosts: [],
 };
 
@@ -44,6 +47,10 @@ export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 export const REPORT_POST_REQUEST = 'REPORT_POST_REQUEST';
 export const REPORT_POST_SUCCESS = 'REPORT_POST_SUCCESS';
 export const REPORT_POST_FAILURE = 'REPORT_POST_FAILURE';
+
+export const REPORT_INFO_REQUEST = 'REPORT_INFO_REQUEST';
+export const REPORT_INFO_SUCCESS = 'REPORT_INFO_SUCCESS';
+export const REPORT_INFO_FAILURE = 'REPORT_INFO_FAILURE';
 
 export const CLEAR_PAGE_DATA = 'CLEAR_PAGE_DATA';
 
@@ -194,6 +201,29 @@ const reducer = (
         reportPostLoading: true,
         reportPostDone: false,
         reportPostError: action.error,
+      };
+    case REPORT_INFO_REQUEST:
+      return {
+        ...state,
+        reportInfoLoading: true,
+        reportInfoDone: false,
+        reportInfoError: null,
+      };
+    case REPORT_INFO_SUCCESS:
+      // eslint-disable-next-line no-case-declarations
+      const post = state.mainPosts.find((v) => v.id === action.data[0].PostId);
+      post.Reports = action.data;
+      return {
+        ...state,
+        reportInfoLoading: false,
+        reportInfoDone: true,
+      };
+    case REPORT_INFO_FAILURE:
+      return {
+        ...state,
+        reportInfoLoading: true,
+        reportInfoDone: false,
+        reportInfoError: action.error,
       };
     case CLEAR_PAGE_DATA:
       return {
