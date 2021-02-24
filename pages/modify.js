@@ -9,7 +9,7 @@ import useInput from '../hooks/useInput';
 import { addChatRequestAction } from '../reducers/post';
 import { InfoWrapper } from '../components/chatBox/style';
 
-const initialData = {
+const initialData = { // 현재 방의 기존 정보가 되어야 함!
   id: 1,
   title: '',
   personnel: 0,
@@ -25,7 +25,7 @@ const initialData = {
   isReported: false,
 };
 
-const createchatbox = () => {
+const modify = () => {
   const dispatch = useDispatch();
 
   const [data, setData] = useState(initialData);
@@ -164,7 +164,6 @@ const createchatbox = () => {
         return <Calender />;
     }
   };
-
   return (
     <AppLayout className="h-full">
       <div className="bg-white w-96 rounded-xl shadow-md mx-auto py-2 px-4 mt-12 mb-5">
@@ -177,7 +176,7 @@ const createchatbox = () => {
                 color: '#f9c00c',
               }}
             >
-              방
+              정
             </span>
             <span
               id="title"
@@ -186,7 +185,7 @@ const createchatbox = () => {
                 color: '#00b9f1',
               }}
             >
-              만
+              보
             </span>
             <span
               id="title"
@@ -195,7 +194,7 @@ const createchatbox = () => {
                 color: '#ff7473',
               }}
             >
-              들
+              수
             </span>
             <span
               id="title"
@@ -204,7 +203,7 @@ const createchatbox = () => {
                 color: '#a593e0',
               }}
             >
-              기
+              정
             </span>
           </div>
           {renderPage(page)}
@@ -247,4 +246,4 @@ const createchatbox = () => {
   );
 };
 
-export default createchatbox;
+export default modify;
