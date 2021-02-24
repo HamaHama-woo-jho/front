@@ -26,3 +26,8 @@ export const Report = styled.span`
   font-size: 13px;
   color: red;
 `;
+
+export const InfoWrapper = styled.span`
+  font-family: 'NanumSquare', sans-serif !important;
+  font-size: 13px;
+`;

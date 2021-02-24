@@ -70,22 +70,22 @@ const ChatBox = ({ post }) => {
   );
 
   const report = () => {
-    const contents = ['불쾌한 감정을 불러일으키는 게시물임', 'b', 'c', 'd', 'e', 'f'];
+    const contents = ['불쾌한 감정을 불러일으키는 게시물', '스팸성 게시물', '성적으로 부적절한 게시물', '사기 또는 오해의 소지', '약물 또는 범죄와 관련된 불법성 게시물', '기타 사유'];
     const titles = [0, 0, 0, 0, 0, 0];
     for(const i of post.Reports) {
       titles[i.title] = titles[i.title] + 1;
     };
-    return titles.map((t) => <span>`${contents[t]}: ${t}회`</span>);
+    return titles.map((t) => (t===0) ? <></>: <span>{contents[t]}: {t}회<br/></span>);
   };
 
   const popover = (
     <Popover id="popover-basic">
-      <Popover.Title as="h3">신고 현황</Popover.Title>
-      <Popover.Content>
+      <Popover.Title as="h3" className="bg-red-500 text-white">신고 현황</Popover.Title>
+      <Popover.Content className="bg-red-50">
         {
           reportInfoLoading
             ? (<Spinner />)
-            : { report().map((i)=> i) }
+            : (<>{report()}</>)
         }
       </Popover.Content>
     </Popover>

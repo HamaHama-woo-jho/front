@@ -7,6 +7,7 @@ import Calender from '../components/Calendar';
 import useInput from '../hooks/useInput';
 
 import { addChatRequestAction } from '../reducers/post';
+import { InfoWrapper } from '../components/chatBox/style';
 
 const initialData = {
   id: 1,
@@ -67,10 +68,11 @@ const createchatbox = () => {
               <Form.Label>제목</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="제목을 입력하세요"
+                placeholder="제목을 입력하세요 (20자 이내)"
                 className="rounded-full"
                 onChange={onChangeTitle}
                 defaultValue={data.title}
+                maxLength="20"
               />
             </Form.Group>
             <Form.Group controlId="personnel" className="my-2">
@@ -105,7 +107,7 @@ const createchatbox = () => {
                 />
               </Form.Group>
             </div>
-            <Form className="my-3 flex justify-center">
+            <Form className="mt-3 mb-2 flex justify-center">
               <Form.Check
                 checked={isDivide}
                 onChange={() => setIsDivide(!isDivide)}
@@ -119,6 +121,11 @@ const createchatbox = () => {
                 label="개인 구매"
               />
             </Form>
+            <InfoWrapper className="text-base text-gray-500 justify-center">
+              * 분할구매는 한 품목을 여러 명이 나눠 가지는 경우, 개인구매는 한 상품을 각자 구매하는 경우에 선택해 주세요! :)
+              <br />☞ 귤 한 박스를 5인이 나눠 갖는 경우: 분할 구매
+              <br />☞ 한 종류의 반찬을 3인이 각각 구매하는 경우: 개인 구매
+            </InfoWrapper>
           </>
         );
       case 1:
@@ -145,9 +152,10 @@ const createchatbox = () => {
               <Form.Control
                 as="textarea"
                 rows={3}
-                placeholder="#짱맛있는귤 #ㅎㅎ #너도와ㅎㅎ엄청맛있어요!!"
+                placeholder="상세 정보를 작성해 주세요. (200자 이내)   예시: 귤 5kg 대량구매. 같이 사서 나눠 드실 분 구해요! #귤 #겨울 #자취생"
                 onChange={onChangeTextArea}
                 defaultValue={data.textArea}
+                maxLength="200"
               />
             </Form.Group>
           </>

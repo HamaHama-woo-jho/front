@@ -142,7 +142,7 @@ const signup = () => {
               <Form.Group>
                 <Row>
                   <Col>
-                    <FormWrapper className="mb-3" placeholder="아이디" onChange={onChangeId} value={id} ref={idRef} type="text" required />
+                    <FormWrapper maxLength="8" className="mb-3" placeholder="아이디(8자 이내)" onChange={onChangeId} value={id} ref={idRef} type="text" required />
                   </Col>
                   <Col xs="auto">
                     <Button className="border rounded-full border-blue-400" variant="outline-info" onClick={checkId}>중복 확인</Button>
