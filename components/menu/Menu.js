@@ -45,7 +45,7 @@ const Menu = () => {
 
   return (
     <div
-      className="py-4 shadow-md"
+      className="pt-8 shadow-md"
       style={{
         backgroundColor: 'white',
         position: 'fixed',
@@ -106,7 +106,7 @@ const Menu = () => {
                 <div
                   onMouseEnter={onHoverProfile}
                   onMouseLeave={onHoverProfileLeave}
-                  className="border rounded-full flex items-center mx-3 text-gray-400 w-20 h-8 justify-center"
+                  className="border rounded-full flex items-center ml-3 text-gray-400 w-20 h-8 justify-center"
                 >
                   {isHoverProfile
                     ? (
@@ -127,7 +127,7 @@ const Menu = () => {
                 <div
                   onMouseEnter={onHoverCreate}
                   onMouseLeave={onHoverCreateLeave}
-                  className="border rounded-full flex items-center mx-3 text-gray-400 w-20 h-8 justify-center"
+                  className="border rounded-full flex items-center ml-3 text-gray-400 w-20 h-8 justify-center"
                 >
                   {isHoverCreate
                     ? (
@@ -192,6 +192,22 @@ const Menu = () => {
               </div>
             )}
         </div>
+      </div>
+      <div className="h-8 text-end mr-5 mt-1 mb-1">
+        {me
+          ? (
+            <>
+              <TextWrapper>
+                {me.nickname}
+              </TextWrapper>
+              <TextWrapper className="text-gray-500">
+                님 안녕하세요.
+              </TextWrapper>
+            </>
+          )
+          : (
+            <></>
+          )}
       </div>
     </div>
   );

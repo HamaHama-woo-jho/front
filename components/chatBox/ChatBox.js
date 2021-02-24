@@ -1,15 +1,19 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, Button } from 'react-bootstrap';
-import { BsThreeDots, BsCalendar } from 'react-icons/bs';
+import { Card, Button, ButtonGroup, Overlay, Tooltip } from 'react-bootstrap';
+import { BsCalendar } from 'react-icons/bs';
+import { RiAlarmWarningLine } from 'react-icons/ri';
+import { AiOutlineDelete } from 'react-icons/ai';
 import { IoEarthSharp } from 'react-icons/io5';
 import { Price, Title, TextWrapper } from './style';
 import { IN_POST_REQUEST, OUT_POST_REQUEST } from '../../reducers/post';
-import Hashtag from '../chatBox/hashtag';
+import Hashtag from './hashtag';
 
 const ChatBox = ({ post }) => {
+  const target = useRef(null);
   const dispatch = useDispatch();
+  const [show, setShow] = useState(false);
   const { inPostError } = useSelector((state) => state.post);
   const { me } = useSelector((state) => state.user);
   const ifIn = me ? post.Participants.map((p) => p.id).includes(me.id) : false;
@@ -31,6 +35,12 @@ const ChatBox = ({ post }) => {
       data: post.id,
     });
   }, []);
+
+  const onDelete = useCallback((e) => {
+    e.preventDefault();
+    console.log('클릭');
+    setShow(!show);
+  }, [show]);
 
   useEffect(() => {
     console.log('실행중');
@@ -112,7 +122,7 @@ const ChatBox = ({ post }) => {
         </Button>
       );
     }
-  }
+  };
 
   const num2currency = (num) => num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').split('.')[0];
 
@@ -128,7 +138,7 @@ const ChatBox = ({ post }) => {
             <TextWrapper>{post.Participants.length} / {post.personnel}</TextWrapper>
           </div>
           <TextWrapper className="mt-1">
-            <Hashtag postData={post.textArea} />
+            <Hashtag postData={post.textArea} hashData={post.Hashtags} />
           </TextWrapper>
           <div className="my-1">
             <TextWrapper>인당 </TextWrapper>
@@ -152,10 +162,31 @@ const ChatBox = ({ post }) => {
           <BsCalendar className="cursor-pointer ml-2" />
         </div>
         <div>
-          <BsThreeDots />
+          {me && (me.id === post.UserId
+            ? (
+              <>
+                <AiOutlineDelete ref={target} onClick={onDelete} className="cursor-pointer" />
+                <Overlay target={target.current} show={show} placement="top">
+                  <Tooltip>
+                    <ButtonGroup>
+                      <Button>
+                        삭제
+                      </Button>
+                      <Button>
+                        삭제
+                      </Button>
+                    </ButtonGroup>
+                  </Tooltip>
+                </Overlay>
+              </>
+            )
+            : (
+              <RiAlarmWarningLine className="cursor-pointer" />
+            )
+          )}
         </div>
       </Card.Footer>
-    </Card>
+    </Card >
   );
 };
 

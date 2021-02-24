@@ -14,6 +14,12 @@ const filterPosts = (posts, filter) => {
       }
       return true;
     })
+    .filter((post) => {
+      const curTag = new Set(post.Hashtags.map((tag) => tag.id));
+      const filterTag = new Set(filter.hashtags.map((tag) => tag.id));
+      const isEmpty = [...new Set([...filterTag].filter((x) => !curTag.has(x)))].length; // 차집합
+      return isEmpty === 0;
+    })
   );
 };
 

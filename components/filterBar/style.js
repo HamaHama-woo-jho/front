@@ -11,6 +11,11 @@ export const TextWrapper = styled.span`
   font-size: 16px;
 `;
 
+export const HashtagWrapper = styled.span`
+  font-family: 'NanumSquare', sans-serif !important;
+  font-size: 15px;
+`;
+
 export const TextWrapperClicked = styled.span`
   font-family: 'NanumSquare', sans-serif !important;
   font-size: 20px;

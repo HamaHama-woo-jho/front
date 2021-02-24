@@ -5,6 +5,7 @@ export const initialState = {
   priceHigh: 999999999,
   from: null,
   to: null,
+  hashtags: [],
 };
 
 export const FILTER_KEYWORD = 'FILTER_KEYWORD';
@@ -14,6 +15,9 @@ export const FILTER_LOCATION = 'FILTER_LOCATION';
 export const FILTER_PRICE = 'FILTER_PRICE';
 export const FILTER_DATE = 'FILTER_DATE';
 export const CLEAR_FILTER = 'CLEAR_FILTER';
+export const FILTER_HASHTAG = 'FILTER_HASHTAG';
+export const FILTER_HASHTAG_REMOVE = 'FILTER_HASHTAG_REMOVE';
+export const FILTER_HASHTAG_REMOVE_ALL = 'FILTER_HASHTAG_REMOVE_ALL';
 
 export const locationAddAction = (data) => ({
   type: FILTER_LOCATION_ADD,
@@ -56,6 +60,21 @@ const reducer = (
         ...state,
         from: action.data.from,
         to: action.data.to,
+      };
+    case FILTER_HASHTAG:
+      return {
+        ...state,
+        hashtags: [...new Set([...state.hashtags, action.data])],
+      };
+    case FILTER_HASHTAG_REMOVE:
+      return {
+        ...state,
+        hashtags: state.hashtags.filter((tag) => tag.content !== action.data),
+      };
+    case FILTER_HASHTAG_REMOVE_ALL:
+      return {
+        ...state,
+        hashtags: [],
       };
     case CLEAR_FILTER:
       return initialState;

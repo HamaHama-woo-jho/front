@@ -1,18 +1,45 @@
-import React from 'react';
-import Link from 'next/link';
+import React, { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import { FILTER_HASHTAG } from '../../reducers/filter';
 
-const PostCardContent = ({ postData }) => (
-  <div>
-    {postData.split(/(#[^\s#]+)/g).map((v, i) => {
-      if (v.match(/(#[^\s#]+)/)) {
-        return <Link href={`/hashtag/${v.slice(1)}`} key={i}><a className="text-blue-500">{v}</a></Link>
-      }
-      return v;
-    })}
-  </div>
-);
+const PostCardContent = ({ postData, hashData }) => {
+  const dispatch = useDispatch();
+  const onHashtag = (value) => {
+    // e.preventDefault();
+    console.log('해시 데이터: ', hashData);
+    const data = hashData.find((tag) => tag.content === value.slice(1));
+    console.log('누구냐: ', data);
+    dispatch({
+      type: FILTER_HASHTAG,
+      data,
+    });
+    console.log('클릭: ', value);
+  };
 
-PostCardContent.propTypes = { postData: PropTypes.string.isRequired };
+  return (
+    <div>
+      {postData.split(/(#[^\s#]+)/g).map((v, i) => {
+        if (v.match(/(#[^\s#]+)/)) {
+          return (
+            <span
+              className="cursor-pointer text-blue-500 hover:bg-indigo-100"
+              // value={v}
+              onClick={() => onHashtag(v)}
+            >
+              {v}
+            </span>
+          );
+        }
+        return v;
+      })}
+    </div>
+  );
+};
+
+PostCardContent.propTypes = {
+  postData: PropTypes.string.isRequired,
+  hashData: PropTypes.array.isRequired,
+};
 
 export default PostCardContent;

@@ -1,17 +1,19 @@
 import React, { useState, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { InputGroup, Form } from 'react-bootstrap';
 import { FiPlus, FiMinus } from 'react-icons/fi';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { TextWrapper, MainTextWrapper } from './style';
+import { IoClose, IoCloseOutline } from 'react-icons/io5';
+import { TextWrapper, MainTextWrapper, HashtagWrapper } from './style';
 import useFilter from '../../hooks/useFilter';
 import useInput from '../../hooks/useInput';
 import RangeSlider from './RangeSlider';
 import Calender from './Calendar';
-import { CLEAR_FILTER, FILTER_KEYWORD, locationAddAction, locationRemoveAction } from '../../reducers/filter';
+import { CLEAR_FILTER, FILTER_HASHTAG_REMOVE, FILTER_KEYWORD, locationAddAction, FILTER_HASHTAG_REMOVE_ALL, locationRemoveAction } from '../../reducers/filter';
 
 const FilterBar = () => {
   const dispatch = useDispatch();
+  const { hashtags } = useSelector((state) => state.filter);
 
   const [keywordFilter, setKeywordFilter, keywordFilterToggle] = useFilter(false);
   const [locationFilter, setLocationFilter, locationFilterToggle] = useFilter(false);
@@ -97,6 +99,19 @@ const FilterBar = () => {
     });
   }, [keyword]);
 
+  const onHashtagDelete = useCallback((content) => {
+    dispatch({
+      type: FILTER_HASHTAG_REMOVE,
+      data: content,
+    });
+  }, []);
+
+  const onHashAllRemove = useCallback(() => {
+    dispatch({
+      type: FILTER_HASHTAG_REMOVE_ALL,
+    });
+  }, []);
+
   return (
     <div>
       <div className="divide-y">
@@ -113,15 +128,15 @@ const FilterBar = () => {
         </div>
         <div>
           <div
-            className="flex item-center py-3 justify-between cursor-pointer"
+            className="flex items-center py-3 justify-between cursor-pointer"
             onClick={keywordFilterToggle}
           >
             <TextWrapper>
               키워드
             </TextWrapper>
             {keywordFilter
-              ? <FiMinus className="mt-1" />
-              : <FiPlus className="mt-1" />}
+              ? <FiMinus />
+              : <FiPlus />}
           </div>
           {keywordFilter
             ? (
@@ -149,15 +164,15 @@ const FilterBar = () => {
         </div>
         <div>
           <div
-            className="flex item-center py-3 justify-between cursor-pointer"
+            className="flex items-center py-3 justify-between cursor-pointer"
             onClick={locationFilterToggle}
           >
             <TextWrapper>
               위치
             </TextWrapper>
             {locationFilter
-              ? <FiMinus className="mt-1" />
-              : <FiPlus className="mt-1" />}
+              ? <FiMinus />
+              : <FiPlus />}
           </div>
           {locationFilter
             ? (
@@ -175,15 +190,15 @@ const FilterBar = () => {
         </div>
         <div>
           <div
-            className="flex item-center py-3 justify-between cursor-pointer"
+            className="flex items-center py-3 justify-between cursor-pointer"
             onClick={priceFilterToggle}
           >
             <TextWrapper>
               금액
             </TextWrapper>
             {priceFilter
-              ? <FiMinus className="mt-1" />
-              : <FiPlus className="mt-1" />}
+              ? <FiMinus />
+              : <FiPlus />}
           </div>
           {priceFilter
             ? (<RangeSlider />)
@@ -201,14 +216,32 @@ const FilterBar = () => {
               ? <FiMinus className="mt-1" />
               : <FiPlus className="mt-1" />}
           </div>
-          <div className="mb-4">
-            {dateFilter
-              ? (
+          {dateFilter
+            ? (
+              <div className="mb-3">
                 <Calender data={date} setData={setDate} />
-              )
-              : (
-                <></>
-              )}
+              </div>
+            )
+            : (
+              <></>
+            )}
+        </div>
+        <div>
+          <div className="flex items-center py-3 justify-between cursor-pointer">
+            <TextWrapper>
+              해시 태그
+            </TextWrapper>
+            <IoCloseOutline className="cursor-pointer text-lg" onClick={onHashAllRemove} />
+          </div>
+          <div>
+            {hashtags.map((tags) => (
+              <div className="inline-flex bg-blue-100 rounded px-2 py-1 mx-2 items-center">
+                <HashtagWrapper>
+                  {tags.content}
+                </HashtagWrapper>
+                <IoClose className="ml-1 cursor-pointer" onClick={() => onHashtagDelete(tags.content)} />
+              </div>
+            ))}
           </div>
         </div>
       </div>
