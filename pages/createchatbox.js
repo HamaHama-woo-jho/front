@@ -13,14 +13,15 @@ const initialData = {
   title: '',
   personnel: 0,
   curPersonnel: 1,
-  from: undefined,
-  to: undefined,
+  from: new Date(),
+  to: new Date(),
   price: 0,
   location: '북측',
   link: '',
   textArea: '',
   tag: '',
   isDivide: true,
+  isReported: false,
 };
 
 const createchatbox = () => {
@@ -36,26 +37,26 @@ const createchatbox = () => {
   const [location, onChangeLocaton] = useInput(data.location);
   const [isDivide, setIsDivide] = useState(true);
 
-  const plusPageCount = useCallback((e) => {
+  const plusPageCount = (e) => {
     e.preventDefault();
     if (page === 0) {
       setData({ ...data, title, link, price, personnel, isDivide });
     }
     setPage(page + 1);
-  }, [page, title, link, price, personnel, isDivide]);
+  };
 
-  const minusPageCount = useCallback((e) => {
+  const minusPageCount = (e) => {
     e.preventDefault();
     if (page === 2) {
       setData({ ...data, textArea, location });
     }
     setPage(page - 1);
     console.log(data);
-  }, [page, title, link, price, personnel, textArea, location]);
+  };
 
-  const onCreate = useCallback(() => {
+  const onCreate = () => {
     dispatch(addChatRequestAction({ ...data, textArea, location }));
-  }, [textArea, location]);
+  };
 
   const renderPage = (key) => {
     switch (key) {

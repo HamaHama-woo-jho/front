@@ -15,6 +15,9 @@ export const initialState = {
   removePostLoading: false,
   removePostDone: false,
   removePostError: null,
+  reportPostLoading: false,
+  reportPostDone: false,
+  reportPostError: null,
   mainPosts: [],
 };
 
@@ -37,6 +40,10 @@ export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
 export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
 export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
+
+export const REPORT_POST_REQUEST = 'REPORT_POST_REQUEST';
+export const REPORT_POST_SUCCESS = 'REPORT_POST_SUCCESS';
+export const REPORT_POST_FAILURE = 'REPORT_POST_FAILURE';
 
 export const CLEAR_PAGE_DATA = 'CLEAR_PAGE_DATA';
 
@@ -155,7 +162,6 @@ const reducer = (
     case REMOVE_POST_SUCCESS:
       // eslint-disable-next-line no-case-declarations
       const newPost = state.mainPosts.filter((v) => v.id !== action.data.postId);
-      console.log('액션데이터: ', action.data);
       return {
         ...state,
         removePostLoading: false,
@@ -168,6 +174,26 @@ const reducer = (
         removePostLoading: true,
         removePostDone: false,
         removePostError: action.error,
+      };
+    case REPORT_POST_REQUEST:
+      return {
+        ...state,
+        reportPostLoading: true,
+        reportPostDone: false,
+        reportPostError: null,
+      };
+    case REPORT_POST_SUCCESS:
+      return {
+        ...state,
+        reportPostLoading: false,
+        reportPostDone: true,
+      };
+    case REPORT_POST_FAILURE:
+      return {
+        ...state,
+        reportPostLoading: true,
+        reportPostDone: false,
+        reportPostError: action.error,
       };
     case CLEAR_PAGE_DATA:
       return {

@@ -1,20 +1,26 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, Button, Modal } from 'react-bootstrap';
+import { Card, Button, Modal, Form } from 'react-bootstrap';
 import { BsCalendar } from 'react-icons/bs';
 import { RiAlarmWarningLine } from 'react-icons/ri';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { IoEarthSharp } from 'react-icons/io5';
-import { Price, Title, TextWrapper } from './style';
-import { IN_POST_REQUEST, OUT_POST_REQUEST, REMOVE_POST_REQUEST } from '../../reducers/post';
+import { Price, Title, TextWrapper, Report } from './style';
+import {
+  IN_POST_REQUEST,
+  OUT_POST_REQUEST,
+  REMOVE_POST_REQUEST,
+  REPORT_POST_REQUEST,
+} from '../../reducers/post';
 import Hashtag from './hashtag';
+import useInput from '../../hooks/useInput';
 
 const ChatBox = ({ post }) => {
   const target = useRef(null);
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
-  const { removeDone } = useSelector((state) => state.post);
+  const { removePostDone, reportPostDone } = useSelector((state) => state.post);
   const { me } = useSelector((state) => state.user);
   const ifIn = me ? post.Participants.map((p) => p.id).includes(me.id) : false;
   const isFinish = post.Participants.length === post.personnel;
@@ -41,66 +47,71 @@ const ChatBox = ({ post }) => {
 
   const onDelete = useCallback((e) => {
     e.preventDefault();
-    setShow(false);
     dispatch({
       type: REMOVE_POST_REQUEST,
       data: post.id,
-    })
+    });
   }, []);
 
-  // useEffect(() => {
-  //   if (removeDone) {
-  //     setShow(false);
-  //   }
-  // }, [removeDone]);
+  const postId = post.id;
+  const [title, onChangeTitle] = useInput('');
+  const [reason, onChangeReason] = useInput('');
+
+  const onReport = useCallback(
+    (e) => {
+      e.preventDefault();
+      console.log(title);
+      dispatch({
+        type: REPORT_POST_REQUEST,
+        data: { postId, title, reason },
+      });
+    },
+    [title, reason],
+  );
+
+  useEffect(() => {
+    if (removePostDone) {
+      setShow(false);
+    }
+    if (reportPostDone) {
+      setShow(false);
+    }
+  }, [removePostDone, reportPostDone]);
 
   const joinButton = (join, finish) => {
     if (join && !finish) {
       return (
         <>
-          {isOwner
-            ? (
-              <Button
-                className="text-sm"
-                variant="outline-secondary"
-              >
-                수정하기
+          {isOwner ? (
+            <Button className="text-sm" variant="outline-secondary">
+              수정하기
+            </Button>
+          ) : (
+            <>
+              <Button className="text-sm" variant="outline-secondary" disabled>
+                구매 신청하기
               </Button>
-            )
-            : (
-              <>
-                <Button
-                  className="text-sm"
-                  variant="outline-secondary"
-                  disabled
-                >
-                  구매 신청하기
-                </Button>
-                <Button
-                  className="text-sm ml-3"
-                  variant="outline-danger"
-                  onClick={onOutChat}
-                >
-                  신청 취소
-                </Button>
-              </>
-            )}
+              <Button
+                className="text-sm ml-3"
+                variant="outline-danger"
+                onClick={onOutChat}
+              >
+                신청 취소
+              </Button>
+            </>
+          )}
         </>
       );
     } else if (join && finish) {
       return (
         <>
-          <Button
-            className="text-sm"
-            variant="outline-danger"
-            disabled
-          >
+          <Button className="text-sm" variant="outline-danger" disabled>
             마감
           </Button>
           <Button
             className="text-sm ml-3"
             variant="success"
-          // onClick={onOutChat}
+            // onClick={onOutChat}
           >
             입장하기
           </Button>
@@ -118,11 +129,7 @@ const ChatBox = ({ post }) => {
       );
     } else {
       return (
-        <Button
-          className="text-sm"
-          variant="outline-danger"
-          disabled
-        >
+        <Button className="text-sm" variant="outline-danger" disabled>
           마감
         </Button>
       );
@@ -136,24 +143,35 @@ const ChatBox = ({ post }) => {
       <Card.Img variant="top" src={post.img} className="border" />
       <Card.Body>
         <Card.Text>
-          <Title>{post.title}</Title>
+          <div className="flex">
+            <Title>{post.title}</Title>
+            {post.isReported ? (
+              <Report className="ml-auto push cursor-pointer hover:text-gray-600">
+                신고당한 게시물
+              </Report>
+            ) : (
+              <></>
+            )}
+          </div>
           <div className="text-xs text-gray-400">
             <span>{post.location}</span>
             <TextWrapper> ⋅ </TextWrapper>
-            <TextWrapper>{post.Participants.length} / {post.personnel}</TextWrapper>
+            <TextWrapper>
+              {post.Participants.length} / {post.personnel}
+            </TextWrapper>
           </div>
           <TextWrapper className="mt-1">
             <Hashtag postData={post.textArea} hashData={post.Hashtags} />
           </TextWrapper>
           <div className="my-1">
             <TextWrapper>인당 </TextWrapper>
-            {post.isDivide
-              ? (
-                <Price>{num2currency(Math.round(post.price / post.personnel))}</Price>
-              )
-              : (
-                <Price>{num2currency(Math.round(post.price))}</Price>
-              )}
+            {post.isDivide ? (
+              <Price>
+                {num2currency(Math.round(post.price / post.personnel))}
+              </Price>
+            ) : (
+              <Price>{num2currency(Math.round(post.price))}</Price>
+            )}
             <TextWrapper> 원</TextWrapper>
           </div>
         </Card.Text>
@@ -167,33 +185,89 @@ const ChatBox = ({ post }) => {
           <BsCalendar className="cursor-pointer ml-2" />
         </div>
         <div>
-          {me && (me.id === post.UserId
-            ? (
+          {me
+            &&
+            (me.id === post.UserId ? (
               <>
-                <AiOutlineDelete ref={target} onClick={handleShow} className="cursor-pointer" />
-                <Modal
-                  show={show}
-                  onHide={handleClose}
-                  centered
-                >
-                  <Modal.Header closeButton className="bg-gray-100">게시물 삭제</Modal.Header>
-                  <Modal.Body>현재 공구 게시물을 삭제하시겠습니까?
+                <AiOutlineDelete
+                  ref={target}
+                  onClick={handleShow}
+                  className="cursor-pointer"
+                />
+                <Modal show={show} onHide={handleClose} centered>
+                  <Modal.Header closeButton className="bg-gray-100">
+                    게시물 삭제
+                  </Modal.Header>
+                  <Modal.Body>
+                    현재 공구 게시물을 삭제하시겠습니까?
                     <br /> 삭제한 뒤에는 복구가 불가합니다.
                   </Modal.Body>
                   <Modal.Footer className="border-none pt-0">
-                    <Button variant="secondary" onClick={handleClose}>취소</Button>
-                    <Button variant="danger" onClick={onDelete}>삭제</Button>
+                    <Button variant="secondary" onClick={handleClose}>
+                      취소
+                    </Button>
+                    <Button variant="danger" onClick={onDelete}>
+                      삭제
+                    </Button>
                   </Modal.Footer>
                 </Modal>
               </>
-            )
-            : (
-              <RiAlarmWarningLine className="cursor-pointer" />
-            )
-          )}
+            ) : (
+              <>
+                <RiAlarmWarningLine
+                  onClick={handleShow}
+                  className="cursor-pointer"
+                />
+                <Modal show={show} onHide={handleClose} centered>
+                  <Modal.Header closeButton className="bg-gray-100">
+                    게시물 신고
+                  </Modal.Header>
+                  <Modal.Body>
+                    <Form.Group className="my-4">
+                      <Form.Label>신고항목</Form.Label>
+                      <Form.Control
+                        as="select"
+                        placeholder="신고항목을 선택해주세요"
+                        required
+                        onChange={onChangeTitle}
+                      >
+                        <option value="1">
+                          불쾌한 감정을 불러일으키는 게시물임
+                        </option>
+                        <option value="2">스팸성 게시물임</option>
+                        <option value="3">성적으로 부적절한 게시물임</option>
+                        <option value="4">
+                          사기 또는 오해의 소지가 있음임
+                        </option>
+                        <option value="5">
+                          약물 또는 범죄와 관련된 불법성 게시물임
+                        </option>
+                      </Form.Control>
+                    </Form.Group>
+                    <Form.Group className="my-4">
+                      <Form.Label>상세 내용</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        placeholder="신고 사유를 자세히 적어주세요"
+                        onChange={onChangeReason}
+                      />
+                    </Form.Group>
+                  </Modal.Body>
+                  <Modal.Footer className="border-none pt-0">
+                    <Button variant="secondary" onClick={handleClose}>
+                      취소
+                    </Button>
+                    <Button variant="danger" onClick={onReport}>
+                      신고
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+              </>
+            ))}
         </div>
       </Card.Footer>
-    </Card >
+    </Card>
   );
 };
 
@@ -215,6 +289,7 @@ ChatBox.propTypes = {
     Participants: PropTypes.arrayOf(PropTypes.object),
     Hashtags: PropTypes.arrayOf(PropTypes.object),
     isDivide: PropTypes.bool,
+    isReported: PropTypes.bool,
   }).isRequired,
 };
 

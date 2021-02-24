@@ -20,3 +20,9 @@ export const TextWrapper = styled.span`
 export const HashTag = styled.span`
   font-family: 'NanumSquare', sans-serif !important;
 `;
+
+export const Report = styled.span`
+  font-family: 'NanumSquare', sans-serif !important;
+  font-size: 13px;
+  color: red;
+`;
