@@ -1,40 +1,17 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import { BsThreeDots, BsCalendar } from 'react-icons/bs';
-import { IoEarthSharp } from 'react-icons/io5';
 import { Price, Title, TextWrapper } from './style';
-import { IN_POST_REQUEST } from '../../reducers/post';
 
 const MyChatBox = ({ post }) => {
-  const calcDateDiff = (a, b) => {
-    const oneDay = 1000 * 60 * 60 * 24;
-    return Math.round((Date.parse(b) - Date.parse(a)) / oneDay);
-  };
-
-  const calcDate = (from, to) => {
-    const now = new Date();
-    const isStart = Date.parse(from) < Date.parse(now);
-    return isStart
-      ? `D-${calcDateDiff(now, to)}`
-      : `${calcDateDiff(now, from)}일 후`;
-  };
-
-  const calcProgressBar = (from, to) => {
-    const now = new Date();
-    const isStart = Date.parse(from) < Date.parse(now);
-    const dateDiff = isStart ? calcDateDiff(now, to) : 0;
-    return dateDiff > 7 || dateDiff === 0 ? 0 : ((7 - dateDiff) * 100) / 7;
-  };
-
   const num2currency = (num) => num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').split('.')[0];
 
   return (
-    <div className="rounded flex border h-24 my-2 py-2 px-2">
-      <div className="w-24 rounded">
-        <img src={post.img} alt="" className="w-24" />
+    <div className="rounded flex border h-24 my-2 pr-2">
+      <div className="w-28">
+        <img src={post.img} alt="" className="w-full h-full" />
       </div>
-      <div className="pl  -2 flex w-full justify-between">
+      <div className="pl-2 flex w-full justify-between">
         <div>
           <Title>
             {post.title}
@@ -43,6 +20,10 @@ const MyChatBox = ({ post }) => {
             <span>{post.location}</span>
             <TextWrapper> ⋅ </TextWrapper>
             <TextWrapper>{post.curPersonnel} / {post.personnel}</TextWrapper>
+            <TextWrapper> ⋅ </TextWrapper>
+            <TextWrapper>
+              {post.to.split('-')[1][0] === '0' ? post.to.split('-')[1][1] : post.to.split('-')[1]}월 {post.to.split('-')[2]}일까지
+            </TextWrapper>
           </div>
           <div>
             <TextWrapper>인당 </TextWrapper>
@@ -57,18 +38,9 @@ const MyChatBox = ({ post }) => {
           </div>
         </div>
         <div className="w-16 my-auto">
-          <CircularProgressbar
-            value={calcProgressBar(post.from, post.to, new Date())}
-            text={calcDate(post.from, post.to, new Date())}
-            styles={buildStyles({
-              textSize: '20px',
-              pathTransitionDuration: 0.5,
-              pathColor: '#0080ff',
-              textColor: '#0080ff',
-              trailColor: '#d6d6d6',
-              backgroundColor: '#3e98c7',
-            })}
-          />
+          <Button>
+            하이하이
+          </Button>
         </div>
       </div>
     </div>

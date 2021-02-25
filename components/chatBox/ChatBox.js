@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import Router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, Button, Modal, Form, OverlayTrigger, Popover, Spinner } from 'react-bootstrap';
-import { BsCalendar } from 'react-icons/bs';
 import { RiAlarmWarningLine } from 'react-icons/ri';
-import { AiOutlineDelete } from 'react-icons/ai';
+import { AiOutlineDelete, AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { IoEarthSharp } from 'react-icons/io5';
 import { Price, Title, TextWrapper, Report } from './style';
 import {
@@ -46,6 +45,7 @@ const ChatBox = ({ post }) => {
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
+  const [like, setLike] = useState(false);
 
   const onDelete = useCallback((e) => {
     e.preventDefault();
@@ -70,13 +70,19 @@ const ChatBox = ({ post }) => {
     [title, reason],
   );
 
+  const onLikeToggle = (e) => {
+    e.preventDefault();
+    setLike(!like);
+  };
+
   const report = () => {
     const contents = ['불쾌한 감정을 불러일으키는 게시물', '스팸성 게시물', '성적으로 부적절한 게시물', '사기 또는 오해의 소지', '약물 또는 범죄와 관련된 불법성 게시물', '기타 사유'];
     const titles = [0, 0, 0, 0, 0, 0];
     if (post.Reports) {
-      post.Reports.map((i) => titles[i.title] = titles[i.title]+1);
+      // eslint-disable-next-line no-return-assign
+      post.Reports.map((i) => titles[i.title] += 1);
     }
-    return titles.map((t) => (t===0) ? <></> : <span>{contents[t]}: {t}회<br/></span>);
+    return titles.map((t) => ((t === 0) ? <></> : <span>{contents[t]}: {t}회<br /></span>));
   };
 
   const popover = (
@@ -201,6 +207,10 @@ const ChatBox = ({ post }) => {
             <TextWrapper>
               {post.Participants.length} / {post.personnel}
             </TextWrapper>
+            <TextWrapper> ⋅ </TextWrapper>
+            <TextWrapper>
+              {post.to.split('-')[1][0] === '0' ? post.to.split('-')[1][1] : post.to.split('-')[1]}월 {post.to.split('-')[2]}일까지
+            </TextWrapper>
           </div>
           <TextWrapper className="mt-1">
             <Hashtag postData={post.textArea} hashData={post.Hashtags} />
@@ -222,9 +232,16 @@ const ChatBox = ({ post }) => {
       <Card.Footer className="flex justify-between">
         <div className="flex">
           <a href={post.link} target="_blank" rel="noopener noreferrer">
-            <IoEarthSharp />
+            <IoEarthSharp className="mr-1" />
           </a>
-          <BsCalendar className="cursor-pointer ml-2" />
+          <div className="flex">
+            {like
+              ? (<AiFillHeart className="cursor-pointer text-red-500 text-lg" onClick={onLikeToggle} />)
+              : (<AiOutlineHeart className="cursor-pointer text-red-500 text-lg" onClick={onLikeToggle} />)}
+            <TextWrapper className="ml-1 text-gray-400">
+              0
+            </TextWrapper>
+          </div>
         </div>
         <div>
           {me
