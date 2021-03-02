@@ -1,31 +1,36 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, Button } from 'react-bootstrap';
 import AppLayout from '../components/AppLayout';
 import Calender from '../components/Calendar';
 import useInput from '../hooks/useInput';
 
-import { addChatRequestAction } from '../reducers/post';
+import { modifyChatRequestAction } from '../reducers/post';
 import { InfoWrapper } from '../components/chatBox/style';
 
-const initialData = { // 현재 방의 기존 정보가 되어야 함!
-  id: 1,
-  title: '',
-  personnel: 0,
-  curPersonnel: 1,
-  from: new Date(),
-  to: new Date(),
-  price: 0,
-  location: '북측',
-  link: '',
-  textArea: '',
-  tag: '',
-  isDivide: true,
-  isReported: false,
-};
-
 const modify = () => {
+  const router = useRouter();
+  const postid = router.query.roominfo;
+  const { mainPosts } = useSelector((state) => state.post);
+  const post = mainPosts.find((e) => String(e.id) === String(postid));
+
+  const initialData = {
+    id: post.id,
+    title: post.title,
+    personnel: post.personnel,
+    curPersonnel: post.curPersonnel,
+    from: new Date(),
+    to: new Date(post.to),
+    price: post.price,
+    location: post.location,
+    link: post.link,
+    textArea: post.textArea,
+    isDivide: post.isDivide,
+  };
+
   const dispatch = useDispatch();
 
   const [data, setData] = useState(initialData);
@@ -36,7 +41,7 @@ const modify = () => {
   const [personnel, onChangePersonnel] = useInput(data.personnel);
   const [textArea, onChangeTextArea] = useInput(data.textArea);
   const [location, onChangeLocaton] = useInput(data.location);
-  const [isDivide, setIsDivide] = useState(true);
+  const [isDivide, setIsDivide] = useState(data.isDivide);
 
   const plusPageCount = (e) => {
     e.preventDefault();
@@ -55,8 +60,9 @@ const modify = () => {
     console.log(data);
   };
 
+  const postId = post.id;
   const onCreate = () => {
-    dispatch(addChatRequestAction({ ...data, textArea, location }));
+    dispatch(modifyChatRequestAction({ ...data, textArea, location, postId }));
   };
 
   const renderPage = (key) => {
@@ -138,6 +144,7 @@ const modify = () => {
               <Form.Control
                 as="select"
                 onChange={onChangeLocaton}
+                defaultValue={data.location}
               >
                 <option hidden value>지역을 선택해 주세요.</option>
                 <option>북측</option>
@@ -244,6 +251,26 @@ const modify = () => {
       </div>
     </AppLayout>
   );
+};
+
+modify.propTypes = {
+  post: PropTypes.shape({
+    id: PropTypes.number,
+    User: PropTypes.object,
+    title: PropTypes.string,
+    personnel: PropTypes.number,
+    curPersonnel: PropTypes.number,
+    from: PropTypes.object,
+    to: PropTypes.object,
+    location: PropTypes.string,
+    price: PropTypes.number,
+    link: PropTypes.string,
+    img: PropTypes.string,
+    textArea: PropTypes.string,
+    createdAt: PropTypes.string,
+    Participants: PropTypes.arrayOf(PropTypes.object),
+    isDivide: PropTypes.bool,
+  }).isRequired,
 };
 
 export default modify;

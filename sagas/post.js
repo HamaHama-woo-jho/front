@@ -8,6 +8,7 @@ import {
   REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE, REMOVE_POST_REQUEST,
   REPORT_POST_SUCCESS, REPORT_POST_FAILURE, REPORT_POST_REQUEST,
   REPORT_INFO_SUCCESS, REPORT_INFO_FAILURE, REPORT_INFO_REQUEST,
+  MODIFY_POST_SUCCESS, MODIFY_POST_FAILURE, MODIFY_POST_REQUEST,
 } from '../reducers/post';
 
 function outPostAPI(data) {
@@ -36,6 +37,10 @@ function reportPostAPI(data) {
 
 function reportInfoAPI(data) {
   return axios.post(`/post/${data}/report`, data);
+}
+
+function modifyPostAPI(data) {
+  return axios.patch('/post/modify', data);
 }
 
 function* outPost(action) {
@@ -147,6 +152,25 @@ function* reportInfo(action) {
   }
 }
 
+function* modifyPost(action) {
+  try {
+    const result = yield call(modifyPostAPI, action.data);
+    yield put({
+      type: MODIFY_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: MODIFY_POST_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+
+function* watchModifyPost() {
+  yield takeLatest(MODIFY_POST_REQUEST, modifyPost);
+}
+
 function* watchReportInfo() {
   yield takeLatest(REPORT_INFO_REQUEST, reportInfo);
 }
@@ -177,6 +201,7 @@ function* watchAddPost() {
 
 export default function* postSaga() {
   yield all([
+    fork(watchModifyPost),
     fork(watchReportInfo),
     fork(watchReportPost),
     fork(watchRemovePost),

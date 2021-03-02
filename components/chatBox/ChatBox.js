@@ -117,8 +117,8 @@ const ChatBox = ({ post }) => {
 
   const onModify = () => {
     Router.push({
-      pathname: '/modify/[pid]', // dynamic routing. 방 id를 어떻게 넘겨줄지 생각해야 함!
-      query: { pid: post.id },
+      pathname: '/modify', // dynamic routing. 방 id를 어떻게 넘겨줄지 생각해야 함!
+      query: { roominfo: post.id },
     });
   };
 

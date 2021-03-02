@@ -21,6 +21,9 @@ export const initialState = {
   reportInfoLoading: false,
   reportInfoDone: false,
   reportInfoError: null,
+  modifyPostLoading: false,
+  modifyPostDone: false,
+  modifyPostError: null,
   mainPosts: [],
 };
 
@@ -52,10 +55,19 @@ export const REPORT_INFO_REQUEST = 'REPORT_INFO_REQUEST';
 export const REPORT_INFO_SUCCESS = 'REPORT_INFO_SUCCESS';
 export const REPORT_INFO_FAILURE = 'REPORT_INFO_FAILURE';
 
+export const MODIFY_POST_REQUEST = 'MODIFY_POST_REQUEST';
+export const MODIFY_POST_SUCCESS = 'MODIFY_POST_SUCCESS';
+export const MODIFY_POST_FAILURE = 'MODIFY_POST_FAILURE';
+
 export const CLEAR_PAGE_DATA = 'CLEAR_PAGE_DATA';
 
 export const addChatRequestAction = (data) => ({
   type: ADD_POST_REQUEST,
+  data,
+});
+
+export const modifyChatRequestAction = (data) => ({
+  type: MODIFY_POST_REQUEST,
   data,
 });
 
@@ -224,6 +236,31 @@ const reducer = (
         reportInfoLoading: true,
         reportInfoDone: false,
         reportInfoError: action.error,
+      };
+    case MODIFY_POST_REQUEST:
+      return {
+        ...state,
+        modifyPostLoading: true,
+        modifyPostDone: false,
+        modifyPostError: null,
+      };
+    case MODIFY_POST_SUCCESS:
+      // eslint-disable-next-line no-case-declarations
+      const updateIndex = state.mainPosts.findIndex((e) => e.id === action.data.id);
+      // eslint-disable-next-line no-param-reassign
+      state.mainPosts[updateIndex] = action.data;
+      return {
+        ...state,
+        modifyPostLoading: false,
+        modifyPostDone: true,
+        mainPosts: [...state.mainPosts],
+      };
+    case MODIFY_POST_FAILURE:
+      return {
+        ...state,
+        modifyPostLoading: true,
+        modifyPostDone: false,
+        modifyPostError: action.error,
       };
     case CLEAR_PAGE_DATA:
       return {
