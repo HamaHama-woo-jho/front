@@ -7,10 +7,9 @@ const filterPosts = (posts, filter) => {
       return filter.priceLow <= price && price <= filter.priceHigh;
     })
     .filter((post) => {
-      const filterLow = filter.from;
       const filterHigh = filter.to;
-      if (filterLow && filterHigh) {
-        return filterLow.getTime() < new Date(post.from).getTime() && new Date(post.to).getTime() < filterHigh.getTime();
+      if (filterHigh) {
+        return new Date(post.to).getTime() >= filterHigh.getTime();
       }
       return true;
     })

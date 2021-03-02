@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { Form, Button } from 'react-bootstrap';
 import AppLayout from '../components/AppLayout';
-import Calender from '../components/Calendar';
+// import Calender from '../components/Ca/lendar';
+import NewCalender from '../components/NewCalendar';
 import useInput from '../hooks/useInput';
 
 import { addChatRequestAction } from '../reducers/post';
@@ -129,7 +130,7 @@ const createchatbox = () => {
           </>
         );
       case 1:
-        return <Calender data={data} setData={setData} />;
+        return <NewCalender data={data} setData={setData} />;
       case 2:
         return (
           <>

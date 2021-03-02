@@ -9,6 +9,7 @@ import useFilter from '../../hooks/useFilter';
 import useInput from '../../hooks/useInput';
 import RangeSlider from './RangeSlider';
 import Calender from './Calendar';
+import NewCalender from './NewCalendar';
 import { CLEAR_FILTER, FILTER_HASHTAG_REMOVE, FILTER_KEYWORD, locationAddAction, FILTER_HASHTAG_REMOVE_ALL, locationRemoveAction } from '../../reducers/filter';
 
 const FilterBar = () => {
@@ -219,7 +220,7 @@ const FilterBar = () => {
           {dateFilter
             ? (
               <div className="mb-3">
-                <Calender data={date} setData={setDate} />
+                <NewCalender data={date} setData={setDate} />
               </div>
             )
             : (

@@ -12,7 +12,7 @@ const MyChatBox = ({ post }) => {
         <img src={post.img} alt="" className="w-full h-full" />
       </div>
       <div className="pl-2 flex w-full justify-between">
-        <div>
+        <div className="py-2">
           <Title>
             {post.title}
           </Title>
